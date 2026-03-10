@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\" />
     <Folder Include="Models\EntityFramework\" />
     <Folder Include="Models\DataManager\" />
     <Folder Include="Models\Repository\" />
