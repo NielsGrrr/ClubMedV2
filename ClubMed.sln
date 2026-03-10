@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35013.160
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubMed", "ClubMed\ClubMed.csproj", "{69825A50-8157-4F50-834B-0B4D0FD160FC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{69825A50-8157-4F50-834B-0B4D0FD160FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69825A50-8157-4F50-834B-0B4D0FD160FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69825A50-8157-4F50-834B-0B4D0FD160FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69825A50-8157-4F50-834B-0B4D0FD160FC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {ADBED858-C1D7-48D3-AFC0-3CD85AA0523C}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,6 @@
+@ClubMed_HostAddress = http://localhost:5042
+
+GET {{ClubMed_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
