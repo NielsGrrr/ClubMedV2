@@ -23,6 +23,7 @@ namespace ClubMed
                 app.UseSwaggerUI();
             }
 
+
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
