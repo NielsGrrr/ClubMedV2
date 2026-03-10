@@ -20,6 +20,8 @@
     <Folder Include="Models\EntityFramework\" />
     <Folder Include="Models\DataManager\" />
     <Folder Include="Models\Repository\" />
+    <Folder Include="DTO\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>
