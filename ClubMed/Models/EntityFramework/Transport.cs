@@ -19,5 +19,8 @@ namespace ClubMed.Models.EntityFramework
         [Column("tra_prix")]
         [Required]
         public decimal? TransportPrix { get; set; }
+
+        [InverseProperty(nameof(Reservation.Transport))]
+        public virtual ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
     }
 }

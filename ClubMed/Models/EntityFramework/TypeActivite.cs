@@ -32,5 +32,8 @@ namespace ClubMed.Models.EntityFramework
         [Required]
         [StringLength(1024)]
         public string? TypeActiviteTitre { get; set; }
+
+        [InverseProperty(nameof(ActiviteAdulte.TypeActivite))]
+        public virtual ICollection<ActiviteAdulte> ActivitesAdultes { get; set; } = new List<ActiviteAdulte>();
     }
 }

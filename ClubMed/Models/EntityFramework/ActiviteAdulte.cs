@@ -41,5 +41,9 @@ namespace ClubMed.Models.EntityFramework
         [Required]
         [StringLength(1024)]
         public string ActiAdulteFrequence { get; set; } = null!;
+
+        [ForeignKey(nameof(ActiAdulteNumType))]
+        [InverseProperty(nameof(Models.EntityFramework.TypeActivite.ActivitesAdultes))]
+        public virtual TypeActivite TypeActivite { get; set; } = null!;
     }
 }

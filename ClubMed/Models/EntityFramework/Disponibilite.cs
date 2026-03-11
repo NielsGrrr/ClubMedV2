@@ -22,5 +22,9 @@ namespace ClubMed.Models.EntityFramework
 
         [Column("dis_estdisponibilite")]
         public bool? IsDisponible { get; set; }
+
+        [ForeignKey(nameof(DispoDate))]
+        [InverseProperty(nameof(Models.EntityFramework.Calendrier.Disponibilites))]
+        public virtual Calendrier Calendrier { get; set; } = null!;
     }
 }

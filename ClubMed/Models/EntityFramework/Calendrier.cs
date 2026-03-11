@@ -8,7 +8,9 @@ namespace ClubMed.Models.EntityFramework
     {
         [Key]
         [Column("cal_date")]
-        [Required]
         public DateTime CalDate { get; set; }
+
+        [InverseProperty(nameof(Disponibilite.Calendrier))]
+        public virtual ICollection<Disponibilite> Disponibilites { get; set; } = new List<Disponibilite>();
     }
 }

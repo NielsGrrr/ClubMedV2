@@ -33,5 +33,9 @@ namespace ClubMed.Models.EntityFramework
         [Required]
         [StringLength(1024)]
         public string ActiEnfantDetail { get; set; } = null!;
+
+        [ForeignKey(nameof(ActiEnfantNumTranche))]
+        [InverseProperty(nameof(Models.EntityFramework.TrancheAge.ActivitesEnfants))]
+        public virtual TrancheAge TrancheAge { get; set; } = null!;
     }
 }
