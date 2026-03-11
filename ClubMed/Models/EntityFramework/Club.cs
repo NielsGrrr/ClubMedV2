@@ -42,5 +42,7 @@ namespace ClubMed.Models.EntityFramework
 
         [ForeignKey("NumPays")]
         public virtual Pays? Pays { get; set; }
+
+        public virtual ICollection<Avis> Avis { get; set; } = new List<Avis>();
     }
 }
