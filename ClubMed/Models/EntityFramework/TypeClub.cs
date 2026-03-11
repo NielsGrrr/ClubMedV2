@@ -14,5 +14,7 @@ namespace ClubMed.Models.EntityFramework
         [StringLength(100)]
         public string? NomType { get; set; }
 
+        public virtual ICollection<CategorieTypeClub> CategorieTypeClubs { get; set; } = new List<CategorieTypeClub>();
+
     }
 }

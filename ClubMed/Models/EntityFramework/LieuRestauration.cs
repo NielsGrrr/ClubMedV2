@@ -27,5 +27,7 @@ namespace ClubMed.Models.EntityFramework
 
         [Column("lre_estbar")]
         public bool? EstBar { get; set; }
+
+        public virtual ICollection<ClubRestauration> ClubRestaurations { get; set; } = new List<ClubRestauration>();
     }
 }

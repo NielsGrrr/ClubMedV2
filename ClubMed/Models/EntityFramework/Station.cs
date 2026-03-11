@@ -35,5 +35,7 @@ namespace ClubMed.Models.EntityFramework
         [Required]
         [Column("sta_infoski", TypeName = "text")]
         public string InfoSki { get; set; } = null!;
+
+        public virtual ICollection<ClubStation> ClubStations { get; set; } = new List<ClubStation>();
     }
 }

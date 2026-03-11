@@ -44,5 +44,13 @@ namespace ClubMed.Models.EntityFramework
         public virtual Pays? Pays { get; set; }
 
         public virtual ICollection<Avis> Avis { get; set; } = new List<Avis>();
+
+        public virtual ICollection<ClubStation> ClubStations { get; set; } = new List<ClubStation>();
+
+        public virtual ICollection<ClubCategorie> ClubCategories{ get; set; } = new List<ClubCategorie>();
+
+        public virtual ICollection<PhotoClub> PhotoClubs { get; set; } = new List<PhotoClub>();
+
+        public virtual ICollection<ClubRestauration> ClubRestaurations { get; set; } = new List<ClubRestauration>();
     }
 }

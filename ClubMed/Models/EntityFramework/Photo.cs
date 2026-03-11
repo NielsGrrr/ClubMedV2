@@ -14,5 +14,9 @@ namespace ClubMed.Models.EntityFramework
         [Column("pho_url")]
         [StringLength(1024)]
         public string? Url { get; set; }
+
+        public virtual ICollection<PhotoClub> PhotoClubs { get; set; } = new List<PhotoClub>();
+
+        public virtual ICollection<PhotoAvis> PhotoAvis { get; set; } = new List<PhotoAvis>();
     }
 }

@@ -51,6 +51,31 @@ namespace ClubMed.Models.EntityFramework.Configurations
                 .WithMany(p => p.Clubs)
                 .HasForeignKey(c => c.NumPays)
                 .HasConstraintName("fk_club_pays");
+
+            builder.HasMany(c => c.Avis)
+                .WithOne(a => a.Club)
+                .HasForeignKey(a => a.IdClub)
+                .HasConstraintName("fk_avis_club");
+
+            builder.HasMany(c => c.ClubStations)
+                .WithOne(cs => cs.Club)
+                .HasForeignKey(cs => cs.IdClub)
+                .HasConstraintName("fk_clubstation_club");
+
+            builder.HasMany(c => c.ClubCategories)
+                .WithOne(cc => cc.Club)
+                .HasForeignKey(cc => cc.IdClub)
+                .HasConstraintName("fk_clubcategorie_club");
+
+            builder.HasMany(c => c.PhotoClubs)
+                .WithOne(pc => pc.Club)
+                .HasForeignKey(pc => pc.IdClub)
+                .HasConstraintName("fk_photoclub_club");
+
+            builder.HasMany(c => c.ClubRestaurations)
+                .WithOne(cr => cr.Club)
+                .HasForeignKey(cr => cr.IdClub)
+                .HasConstraintName("fk_clubrestauration_club");
         }
     }
 }

@@ -43,5 +43,7 @@ namespace ClubMed.Models.EntityFramework
         [ForeignKey("NumClient")]
         public virtual Client Client { get; set; } = null!;
 
+        public virtual ICollection<PhotoAvis> PhotoAvis { get; set; } = new List<PhotoAvis>();
+
     }
 }
