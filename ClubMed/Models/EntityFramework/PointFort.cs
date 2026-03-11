@@ -17,5 +17,8 @@ namespace ClubMed.Models.EntityFramework
 
         [InverseProperty(nameof(TypeChambrePointFort.PointFortNav))]
         public virtual ICollection<TypeChambrePointFort> TypeChambrePointForts { get; set; } = new List<TypeChambrePointFort>();
+
+        [InverseProperty(nameof(Icon.PointFortNav))]
+        public virtual ICollection<Icon> Icons { get; set; } = new List<Icon>();
     }
 }

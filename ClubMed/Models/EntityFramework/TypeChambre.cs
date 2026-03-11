@@ -10,7 +10,6 @@ namespace ClubMed.Models.EntityFramework
         [Column("tch_id")]
         public int IdTypeChambre { get; set; }
 
-        [Key]
         [Column("pht_id")]
         public int NumPhoto { get; set; }
 

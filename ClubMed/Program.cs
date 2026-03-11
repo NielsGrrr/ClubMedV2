@@ -1,4 +1,7 @@
 
+using ClubMed.Models.EntityFramework;
+using Microsoft.EntityFrameworkCore;
+
 namespace ClubMed
 {
     public class Program
@@ -13,6 +16,13 @@ namespace ClubMed
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // Add DbContext
+            builder.Services.AddDbContext<ClubMedDbContext>(options =>
+                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+                       .UseLoggerFactory(ClubMedDbContext.MyLoggerFactory)
+                       .EnableSensitiveDataLogging()
+            );
 
             var app = builder.Build();
 
