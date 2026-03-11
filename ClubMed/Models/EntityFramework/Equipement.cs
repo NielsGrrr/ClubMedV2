@@ -11,7 +11,6 @@ namespace ClubMed.Models.EntityFramework
         [Column("equ_num")]
         public int NumEquipement { get; set; }
 
-        [Key]
         [Column("icn_num")]
         public int NumIcon { get; set; }
 
@@ -21,5 +20,8 @@ namespace ClubMed.Models.EntityFramework
 
         [InverseProperty(nameof(TypeChambreEquipement.EquipementNav))]
         public virtual ICollection<TypeChambreEquipement> TypeChambreEquipements { get; set; } = new List<TypeChambreEquipement>();
+
+        [InverseProperty(nameof(Icon.Equipements))]
+        public virtual Icon Icon { get; set; } = null!;
     }
 }

@@ -3,14 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClubMed.Models.EntityFramework
 {
-    /*-- Table: icon
-CREATE TABLE icon (
-    numicon integer NOT NULL,
-    numpointfort integer NOT NULL,
-    numservice integer NOT NULL,
-    numequipementsallebain integer NOT NULL,
-    lienicon character varying(1024)
-);*/
     [Table("t_e_icon_ico")]
     public partial class Icon
     {
@@ -18,15 +10,12 @@ CREATE TABLE icon (
         [Column("ico_num")]
         public int NumIcon { get; set; }
 
-        [Key]
         [Column("ptf_num")]
         public int NumPointFort { get; set; }
 
-        [Key]
         [Column("srv_num")]
         public int NumService { get; set; }
 
-        [Key]
         [Column("esb_num")]
         public int NumEquipementSalleDeBain { get; set; }
 
@@ -34,5 +23,16 @@ CREATE TABLE icon (
         [StringLength(1024)]
         public string? LienIcon { get; set; }
 
+        [InverseProperty(nameof(PointFort.Icons))]
+        public virtual PointFort PointFortNav { get; set; } = null!;
+
+        [InverseProperty(nameof(Service.Icons))]
+        public virtual Service ServiceNav { get; set; } = null!;
+
+        [InverseProperty(nameof(EquipementSalleDeBain.Icons))]
+        public virtual EquipementSalleDeBain EquipementSalleDeBainNav { get; set; } = null!;
+
+        [InverseProperty(nameof(Equipement.Icon))]
+        public virtual ICollection<Equipement> Equipements { get; set; } = new List<Equipement>();
     }
 }
