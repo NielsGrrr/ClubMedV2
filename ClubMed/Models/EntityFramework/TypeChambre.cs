@@ -27,18 +27,20 @@ namespace ClubMed.Models.EntityFramework
         [Column("tch_capacitemax")]
         public int? CapaciteMax { get; set; }
 
-        [Key]
         [Column("clu_id")]
         public int IdClub { get; set; }
 
         [Column("tch_indisponible")]
         public bool? Indisponible { get; set; } = false;
 
+        [InverseProperty(nameof(Photo.TypeChambre))]
+        public virtual Photo PhotoNav { get; set; } = null!;
+
         [InverseProperty(nameof(Chambre.Type))]
         public virtual ICollection<Chambre> Chambres { get; set; } = new List<Chambre>();
 
         [InverseProperty(nameof(Club.TypeChambre))]
-        public virtual ICollection<Club> Clubs { get; set; } = new List<Club>();
+        public virtual Club ClubNav { get; set; } = null!;
 
         [InverseProperty(nameof(TypeChambreEquipement.TypeChambreNav))]
         public virtual ICollection<TypeChambreEquipement> TypeChambreEquipements { get; set; } = new List<TypeChambreEquipement>();
@@ -51,5 +53,8 @@ namespace ClubMed.Models.EntityFramework
 
         [InverseProperty(nameof(TypeChambrePointFort.TypeChambreNav))]
         public virtual ICollection<TypeChambrePointFort> TypeChambrePointForts { get; set; } = new List<TypeChambrePointFort>();
+
+        [InverseProperty(nameof(PrixPeriode.TypeChambreNav))]
+        public virtual ICollection<PrixPeriode> PrixPeriodes { get; set; } = new List<PrixPeriode>();
     }
 }
