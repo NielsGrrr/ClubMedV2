@@ -13,26 +13,11 @@ namespace ClubMed.Models.EntityFramework.Configurations
                 .HasName("pk_numcategory");
 
             builder.Property(c => c.NumCategory)
-                .HasColumnName("numcategory");
+                .HasColumnName("cat_numcategory");
 
             builder.Property(c => c.NomCategory)
-                .HasColumnName("nomcategory")
+                .HasColumnName("cat_nomcategory")
                 .HasMaxLength(100);
-
-            builder.HasMany(c => c.ClubCategories)
-                .WithOne(cc => cc.Categorie)
-                .HasForeignKey(cc => cc.NumCategory)
-                .HasConstraintName("fk_clubcategorie_numcategory");
-
-            builder.HasMany(c => c.CategorieLocalisations)
-                .WithOne(cl => cl.Categorie)
-                .HasForeignKey(cl => cl.NumCategory)
-                .HasConstraintName("fk_categorielocalisation_numcategory");
-
-            builder.HasMany(c => c.CategorieTypeClubs)
-                .WithOne(ctc => ctc.Categorie)
-                .HasForeignKey(ctc => ctc.NumCategory)
-                .HasConstraintName("fk_categorietypeclub_numcategory");
         }
     }
 }

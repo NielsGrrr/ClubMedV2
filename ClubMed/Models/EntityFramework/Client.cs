@@ -1,18 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace ClubMed.Models.EntityFramework
 {
     [Table("t_e_client_cli")]
-    [Index(nameof(Email), IsUnique = true)]
     public class Client
     {
         [Key]
         [Column("cli_numclient")]
         public int NumClient { get; set; }
 
-        [Column("cli_numadresse")] // La clé étrangère porte aussi le préfixe de la table courante
+        [Column("cli_numadresse")]
         public int? NumAdresse { get; set; }
 
         [Column("cli_genre")]
@@ -69,9 +67,8 @@ namespace ClubMed.Models.EntityFramework
         [Column("cli_trial_ends_at")]
         public DateTime? TrialEndsAt { get; set; }
 
-        // Architecture : Propriété de navigation
-        [ForeignKey(nameof(NumAdresse))]
-        [InverseProperty(nameof(Adresse.Clients))]
         public virtual Adresse? AdresseResidence { get; set; }
+
+        public virtual ICollection<Avis> Avis { get; set; } = new List<Avis>();
     }
 }

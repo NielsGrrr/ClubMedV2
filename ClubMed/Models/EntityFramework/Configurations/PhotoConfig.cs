@@ -15,16 +15,6 @@ namespace ClubMed.Models.EntityFramework.Configurations
             builder.Property(p => p.Url)
                 .HasColumnName("pho_url")
                 .HasMaxLength(1024);
-
-            builder.HasMany(p => p.PhotoClubs)
-                   .WithOne(pc => pc.Photo)
-                   .HasForeignKey(pc => pc.NumPhoto)
-                   .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasMany(p => p.PhotoAvis)
-                .WithOne(pa => pa.Photo)
-                .HasForeignKey(pa => pa.NumPhoto)
-                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

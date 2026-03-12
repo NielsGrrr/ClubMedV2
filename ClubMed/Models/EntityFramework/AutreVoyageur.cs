@@ -32,8 +32,6 @@ namespace ClubMed.Models.EntityFramework
         [Required]
         public DateTime? AutreVoyageurDateNaissance { get; set; }
 
-        [ForeignKey(nameof(AutreVoyageurNumResa))]
-        [InverseProperty(nameof(Models.EntityFramework.Reservation.AutresVoyageurs))]
         public virtual Reservation Reservation { get; set; } = null!;
     }
 }

@@ -17,11 +17,6 @@ namespace ClubMed.Models.EntityFramework.Configurations
             builder.Property(tc => tc.NomType)
                 .HasColumnName("tcl_nomtype")
                 .HasMaxLength(100);
-
-            builder.HasMany(tc => tc.CategorieTypeClubs)
-                .WithOne(ctc => ctc.TypeClub)
-                .HasForeignKey(ctc => ctc.NumType)
-                .HasConstraintName("fk_categorietypeclub_typeclub");
         }
     }
 }

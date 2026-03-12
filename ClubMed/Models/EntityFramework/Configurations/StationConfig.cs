@@ -42,12 +42,6 @@ namespace ClubMed.Models.EntityFramework.Configurations
                 .IsRequired()
                 .HasColumnType("text")
                 .HasColumnName("sta_infoski");
-
-            builder.HasMany(e => e.ClubStations)
-                .WithOne(cs => cs.Station)
-                .HasForeignKey(cs => cs.IdStation)
-                .HasConstraintName("fk_clubstation_station");
-
         }
     }
 }

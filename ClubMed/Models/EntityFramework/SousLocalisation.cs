@@ -18,7 +18,6 @@ namespace ClubMed.Models.EntityFramework
         [StringLength(1024)]
         public string? NomPays { get; set; }
 
-        [InverseProperty(nameof(PaysRegion.SousLocalisationAssociee))]
         public virtual ICollection<PaysRegion> PaysRegions { get; set; } = new List<PaysRegion>();
     }
 }

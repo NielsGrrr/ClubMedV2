@@ -7,14 +7,14 @@ namespace ClubMed.Models.EntityFramework.Configurations
     {
         public void Configure(EntityTypeBuilder<PrixPeriode> builder)
         {
-            // 1. Clé Primaire
+            // 1. Clï¿½ Primaire
             builder.HasKey(pp => new { pp.NumPeriode, pp.IdTypeChambre })
                 .HasName("pk_prix_periode");
 
-            // 2. Contraintes et Propriétés
+            // 2. Contraintes et Propriï¿½tï¿½s
             builder.Property(pp => pp.NumPeriode).HasMaxLength(10);
 
-            builder.Property(pp => pp.PrixPeriode)
+            builder.Property(pp => pp.Prix)
                 .HasPrecision(10, 2);
 
             // 3. Relations
@@ -24,7 +24,7 @@ namespace ClubMed.Models.EntityFramework.Configurations
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("fk_prix_periode_periode");
 
-            builder.HasOne(pp => pp.TypeChambre)
+            builder.HasOne(pp => pp.TypeChambreNav)
                 .WithMany(tc => tc.PrixPeriodes)
                 .HasForeignKey(pp => pp.IdTypeChambre)
                 .OnDelete(DeleteBehavior.Restrict)

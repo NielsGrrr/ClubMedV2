@@ -23,12 +23,6 @@ namespace ClubMed.Models.EntityFramework.Configurations
             builder.Property(t => t.TrancheAgeMax)
                    .IsRequired()
                    .HasColumnName("tra_agemax");
-
-            builder.HasMany(t => t.ActivitesEnfants)
-                   .WithOne(a => a.TrancheAge)
-                   .HasForeignKey(a => a.ActiEnfantNumTranche)
-                   .OnDelete(DeleteBehavior.Cascade)
-                   .HasConstraintName("fk_activiteenfant_trancheage");
         }
     }
 }

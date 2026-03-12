@@ -33,28 +33,20 @@ namespace ClubMed.Models.EntityFramework
         [Column("tch_indisponible")]
         public bool? Indisponible { get; set; } = false;
 
-        [InverseProperty(nameof(Photo.TypeChambre))]
         public virtual Photo PhotoNav { get; set; } = null!;
 
-        [InverseProperty(nameof(Chambre.Type))]
         public virtual ICollection<Chambre> Chambres { get; set; } = new List<Chambre>();
 
-        [InverseProperty(nameof(Club.TypeChambre))]
         public virtual Club ClubNav { get; set; } = null!;
 
-        [InverseProperty(nameof(TypeChambreEquipement.TypeChambreNav))]
         public virtual ICollection<TypeChambreEquipement> TypeChambreEquipements { get; set; } = new List<TypeChambreEquipement>();
 
-        [InverseProperty(nameof(TypeChambreSdb.TypeChambreNav))]
         public virtual ICollection<TypeChambreSdb> TypeChambreSdbs { get; set; } = new List<TypeChambreSdb>();
 
-        [InverseProperty(nameof(TypeChambreService.TypeChambreNav))]
         public virtual ICollection<TypeChambreService> TypeChambreServices { get; set; } = new List<TypeChambreService>();
 
-        [InverseProperty(nameof(TypeChambrePointFort.TypeChambreNav))]
         public virtual ICollection<TypeChambrePointFort> TypeChambrePointForts { get; set; } = new List<TypeChambrePointFort>();
 
-        [InverseProperty(nameof(PrixPeriode.TypeChambreNav))]
         public virtual ICollection<PrixPeriode> PrixPeriodes { get; set; } = new List<PrixPeriode>();
     }
 }

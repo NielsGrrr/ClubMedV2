@@ -24,14 +24,11 @@ namespace ClubMed.Models.EntityFramework.Configurations
                    .OnDelete(DeleteBehavior.Cascade)
                    .HasConstraintName("fk_crg_rgr");
 
-            // Relation vers Club à décommenter plus tard
-            /*
             builder.HasOne(cr => cr.ClubAssocie)
                    .WithMany(c => c.ClubRegroupements)
                    .HasForeignKey(cr => cr.IdClub)
                    .OnDelete(DeleteBehavior.Cascade)
                    .HasConstraintName("fk_crg_clb");
-            */
         }
     }
 }

@@ -11,10 +11,8 @@ namespace ClubMed.Models.EntityFramework
         [Column("pho_numphoto")]
         public int NumPhoto { get; set; }
 
-        [ForeignKey("NumAvis")]
         public virtual Avis Avis { get; set; } = null!;
 
-        [ForeignKey("NumPhoto")]
         public virtual Photo Photo { get; set; } = null!;
     }
 }

@@ -25,12 +25,6 @@ namespace ClubMed.Models.EntityFramework.Configurations
                    .IsRequired()
                    .HasColumnName("tra_prix")
                    .HasColumnType("decimal(18,2)");
-
-            builder.HasMany(t => t.Reservations)
-                   .WithOne(r => r.Transport)
-                   .HasForeignKey(r => r.TransportId)
-                   .OnDelete(DeleteBehavior.Cascade)
-                   .HasConstraintName("fk_reservation_transport");
         }
     }
 }

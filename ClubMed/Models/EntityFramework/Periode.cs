@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClubMed.Models.EntityFramework
@@ -18,7 +17,6 @@ namespace ClubMed.Models.EntityFramework
         [Column("per_datefin", TypeName = "date")]
         public DateTime? DateFin { get; set; }
 
-        [InverseProperty(nameof(PrixPeriode.Periode))]
         public virtual ICollection<PrixPeriode> PrixPeriodes { get; set; } = new List<PrixPeriode>();
     }
 }

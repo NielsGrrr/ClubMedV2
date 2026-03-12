@@ -14,12 +14,6 @@ namespace ClubMed.Models.EntityFramework.Configurations
 
             builder.Property(c => c.CalDate)
                    .HasColumnName("cal_date");
-
-            builder.HasMany(c => c.Disponibilites)
-                   .WithOne(d => d.Calendrier)
-                   .HasForeignKey(d => d.DispoDate)
-                   .OnDelete(DeleteBehavior.Cascade)
-                   .HasConstraintName("fk_disponibilite_calendrier");
         }
     }
 }

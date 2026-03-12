@@ -7,15 +7,15 @@ namespace ClubMed.Models.EntityFramework.Configurations
     {
         public void Configure(EntityTypeBuilder<TypeChambrePointFort> builder)
         {
-            // 1. Clé Primaire
+            // 1. Clï¿½ Primaire
             builder.HasKey(tcpf => new { tcpf.NumPointFort, tcpf.IdTypeChambre })
                 .HasName("pk_type_chambre_pointfort");
 
-            // 2. Contraintes et Propriétés
+            // 2. Contraintes et Propriï¿½tï¿½s
 
             // 3. Relations
             builder.HasOne(tcpf => tcpf.PointFortNav)
-                .WithMany()
+                .WithMany(p => p.TypeChambrePointForts)
                 .HasForeignKey(tcpf => tcpf.NumPointFort)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("fk_type_chambre_pointfort_pointfort");

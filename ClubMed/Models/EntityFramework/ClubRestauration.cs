@@ -11,10 +11,8 @@ namespace ClubMed.Models.EntityFramework
         [Column("lre_numrestauration")]
         public int NumRestauration { get; set; }
 
-        [ForeignKey("cre_IdClub")]
         public virtual Club Club { get; set; } = null!;
 
-        [ForeignKey("NumRestauration")]
         public virtual LieuRestauration LieuRestauration { get; set; } = null!;
     }
 }

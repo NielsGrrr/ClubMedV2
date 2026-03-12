@@ -40,17 +40,22 @@ namespace ClubMed.Models.EntityFramework
         [StringLength(50)]
         public string? StatutMiseEnLigne { get; set; } = "EN_CREATION";
 
-        [ForeignKey("NumPays")]
-        public virtual Pays? Pays { get; set; }
+        public virtual PaysRegion? Pays { get; set; }
 
         public virtual ICollection<Avis> Avis { get; set; } = new List<Avis>();
 
         public virtual ICollection<ClubStation> ClubStations { get; set; } = new List<ClubStation>();
 
-        public virtual ICollection<ClubCategorie> ClubCategories{ get; set; } = new List<ClubCategorie>();
+        public virtual ICollection<ClubCategorie> ClubCategories { get; set; } = new List<ClubCategorie>();
 
         public virtual ICollection<PhotoClub> PhotoClubs { get; set; } = new List<PhotoClub>();
 
         public virtual ICollection<ClubRestauration> ClubRestaurations { get; set; } = new List<ClubRestauration>();
+
+        public virtual ICollection<ClubChambre> ClubChambres { get; set; } = new List<ClubChambre>();
+
+        public virtual ICollection<TypeChambre> TypeChambres { get; set; } = new List<TypeChambre>();
+
+        public virtual ICollection<ClubRegroupement> ClubRegroupements { get; set; } = new List<ClubRegroupement>();
     }
 }

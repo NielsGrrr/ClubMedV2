@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClubMed.Models.EntityFramework
@@ -18,10 +17,8 @@ namespace ClubMed.Models.EntityFramework
         [StringLength(1024)]
         public string? Nom { get; set; }
 
-        [InverseProperty(nameof(TypeChambreEquipement.EquipementNav))]
         public virtual ICollection<TypeChambreEquipement> TypeChambreEquipements { get; set; } = new List<TypeChambreEquipement>();
 
-        [InverseProperty(nameof(Icon.Equipements))]
         public virtual Icon Icon { get; set; } = null!;
     }
 }
