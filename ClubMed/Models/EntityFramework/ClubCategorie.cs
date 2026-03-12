@@ -14,10 +14,8 @@ namespace ClubMed.Models.EntityFramework
         [Column("cat_numcategory")]
         public int NumCategory { get; set; }
 
-        [ForeignKey("IdClub")]
         public virtual Club Club { get; set; } = null!;
 
-        [ForeignKey("NumCategory")]
         public virtual Categorie Categorie { get; set; } = null!;
 
     }

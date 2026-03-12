@@ -18,5 +18,7 @@ namespace ClubMed.Models.EntityFramework
         public virtual ICollection<PhotoClub> PhotoClubs { get; set; } = new List<PhotoClub>();
 
         public virtual ICollection<PhotoAvis> PhotoAvis { get; set; } = new List<PhotoAvis>();
+
+        public virtual ICollection<TypeChambre> TypeChambres { get; set; } = new List<TypeChambre>();
     }
 }

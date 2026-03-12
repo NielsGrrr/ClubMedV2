@@ -33,8 +33,6 @@ namespace ClubMed.Models.EntityFramework
         [StringLength(50)]
         public string? TransactionStatut { get; set; }
 
-        [ForeignKey(nameof(ResaNum))]
-        [InverseProperty(nameof(Models.EntityFramework.Reservation.Transactions))]
         public virtual Reservation Reservation { get; set; } = null!;
     }
 }

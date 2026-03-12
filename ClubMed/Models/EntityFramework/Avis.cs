@@ -36,14 +36,11 @@ namespace ClubMed.Models.EntityFramework
 
         [Column("avi_reponse", TypeName = "text")]
         public string? Reponse { get; set; }
-        
-        [ForeignKey("IdClub")]
+
         public virtual Club Club { get; set; } = null!;
 
-        [ForeignKey("NumClient")]
         public virtual Client Client { get; set; } = null!;
 
         public virtual ICollection<PhotoAvis> PhotoAvis { get; set; } = new List<PhotoAvis>();
-
     }
 }

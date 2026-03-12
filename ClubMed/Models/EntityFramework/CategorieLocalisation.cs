@@ -11,10 +11,8 @@ namespace ClubMed.Models.EntityFramework
         [Column("numlocalisation")]
         public int NumLocalisation { get; set; }
 
-        [ForeignKey("NumCategory")]
         public virtual Categorie Categorie { get; set; } = null!;
 
-        [ForeignKey("NumLocalisation")]
         public virtual Localisation Localisation { get; set; } = null!;
 
     }

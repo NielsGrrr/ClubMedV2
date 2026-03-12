@@ -37,12 +37,6 @@ namespace ClubMed.Models.EntityFramework.Configurations
                    .IsRequired()
                    .HasMaxLength(1024)
                    .HasColumnName("tya_titre");
-
-            builder.HasMany(t => t.ActivitesAdultes)
-                   .WithOne(a => a.TypeActivite)
-                   .HasForeignKey(a => a.ActiAdulteNumType)
-                   .OnDelete(DeleteBehavior.Cascade)
-                   .HasConstraintName("fk_activiteadulte_typeactivite");
         }
     }
 }

@@ -20,7 +20,6 @@ namespace ClubMed.Models.EntityFramework
         [Required]
         public decimal? TransportPrix { get; set; }
 
-        [InverseProperty(nameof(Reservation.Transport))]
         public virtual ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
     }
 }

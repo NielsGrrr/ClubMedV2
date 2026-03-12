@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClubMed.Models.EntityFramework
@@ -15,10 +14,8 @@ namespace ClubMed.Models.EntityFramework
         [StringLength(1024)]
         public string? Nom { get; set; }
 
-        [InverseProperty(nameof(TypeChambrePointFort.PointFortNav))]
         public virtual ICollection<TypeChambrePointFort> TypeChambrePointForts { get; set; } = new List<TypeChambrePointFort>();
 
-        [InverseProperty(nameof(Icon.PointFortNav))]
         public virtual ICollection<Icon> Icons { get; set; } = new List<Icon>();
     }
 }

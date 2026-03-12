@@ -14,19 +14,19 @@ namespace ClubMed.Models.EntityFramework.Configurations
 
             // 3. Relations
             builder.HasOne(i => i.PointFortNav)
-                .WithMany()
+                .WithMany(p => p.Icons)
                 .HasForeignKey(i => i.NumPointFort)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("fk_icon_pointfort");
 
             builder.HasOne(i => i.ServiceNav)
-                .WithMany()
+                .WithMany(s => s.Icons)
                 .HasForeignKey(i => i.NumService)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("fk_icon_service");
 
             builder.HasOne(i => i.EquipementSalleDeBainNav)
-                .WithMany()
+                .WithMany(e => e.Icons)
                 .HasForeignKey(i => i.NumEquipementSalleDeBain)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("fk_icon_equipementsalledebain");

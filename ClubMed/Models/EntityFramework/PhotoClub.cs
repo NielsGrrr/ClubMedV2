@@ -14,10 +14,8 @@ namespace ClubMed.Models.EntityFramework
         [Column("pcl_ordre")]
         public int? Ordre { get; set; }
 
-        [ForeignKey("IdClub")]
         public virtual Club Club { get; set; } = null!;
 
-        [ForeignKey("NumPhoto")]
         public virtual Photo Photo { get; set; } = null!;
     }
 }

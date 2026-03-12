@@ -14,10 +14,8 @@ namespace ClubMed.Models.EntityFramework
         [StringLength(1024)]
         public string? Nom { get; set; }
 
-        [InverseProperty(nameof(TypeChambreService.ServiceNav))]
         public virtual ICollection<TypeChambreService> TypeChambreServices { get; set; } = new List<TypeChambreService>();
 
-        [InverseProperty(nameof(Icon.ServiceNav))]
         public virtual ICollection<Icon> Icons { get; set; } = new List<Icon>();
     }
 }

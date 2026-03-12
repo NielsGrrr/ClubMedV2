@@ -11,9 +11,8 @@ namespace ClubMed.Models.EntityFramework
         [Column("tcl_numtype")]
         public int NumType { get; set; }
 
-        [ForeignKey("NumCategory")]
         public virtual Categorie Categorie { get; set; } = null!;
-        [ForeignKey("NumType")]
+
         public virtual TypeClub TypeClub { get; set; } = null!;
     }
 }

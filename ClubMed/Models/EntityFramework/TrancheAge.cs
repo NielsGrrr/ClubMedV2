@@ -19,7 +19,6 @@ namespace ClubMed.Models.EntityFramework
         [Required]
         public int? TrancheAgeMax { get; set; }
 
-        [InverseProperty(nameof(ActiviteEnfant.TrancheAge))]
         public virtual ICollection<ActiviteEnfant> ActivitesEnfants { get; set; } = new List<ActiviteEnfant>();
     }
 }

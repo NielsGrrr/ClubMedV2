@@ -34,7 +34,6 @@ namespace ClubMed.Models.EntityFramework
         [StringLength(1024)]
         public string Pays { get; set; } = null!;
 
-        [InverseProperty(nameof(Client.AdresseResidence))]
         public virtual ICollection<Client> Clients { get; set; } = new List<Client>();
     }
 }

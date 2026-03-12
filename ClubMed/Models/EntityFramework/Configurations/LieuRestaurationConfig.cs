@@ -35,11 +35,6 @@ namespace ClubMed.Models.EntityFramework.Configurations
 
             builder.Property(e => e.EstBar)
                 .HasColumnName("lre_estbar");
-
-            builder.HasMany(e => e.ClubRestaurations)
-                .WithOne(cr => cr.LieuRestauration)
-                .HasForeignKey(cr => cr.NumRestauration)
-                .HasConstraintName("FK_ClubRestauration_LieuRestauration");
         }
     }
 }

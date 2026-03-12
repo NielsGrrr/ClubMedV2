@@ -23,16 +23,12 @@ namespace ClubMed.Models.EntityFramework
         [StringLength(1024)]
         public string? LienIcon { get; set; }
 
-        [InverseProperty(nameof(PointFort.Icons))]
         public virtual PointFort PointFortNav { get; set; } = null!;
 
-        [InverseProperty(nameof(Service.Icons))]
         public virtual Service ServiceNav { get; set; } = null!;
 
-        [InverseProperty(nameof(EquipementSalleDeBain.Icons))]
         public virtual EquipementSalleDeBain EquipementSalleDeBainNav { get; set; } = null!;
 
-        [InverseProperty(nameof(Equipement.Icon))]
         public virtual ICollection<Equipement> Equipements { get; set; } = new List<Equipement>();
     }
 }

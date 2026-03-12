@@ -14,7 +14,6 @@ namespace ClubMed.Models.EntityFramework
         [StringLength(1024)]
         public string? LibelleRegroupement { get; set; }
 
-        [InverseProperty(nameof(ClubRegroupement.RegroupementAssocie))]
         public virtual ICollection<ClubRegroupement> ClubRegroupements { get; set; } = new List<ClubRegroupement>();
     }
 }

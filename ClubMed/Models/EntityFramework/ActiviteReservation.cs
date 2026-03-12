@@ -1,11 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace ClubMed.Models.EntityFramework
 {
     [Table("t_j_activitereservation_rea")]
-    [PrimaryKey(nameof(ResaNum), nameof(ActiId))]
     public class ActiviteReservation
     {
         [Column("rea_numreservation")]
@@ -29,8 +27,6 @@ namespace ClubMed.Models.EntityFramework
         [Column("rea_dateenvoi")]
         public DateTime? ResaDateEnvoi { get; set; }
 
-        [ForeignKey(nameof(ResaNum))]
-        [InverseProperty(nameof(Models.EntityFramework.Reservation.ActivitesReservations))]
         public virtual Reservation Reservation { get; set; } = null!;
     }
 }

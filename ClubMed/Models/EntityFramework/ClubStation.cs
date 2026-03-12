@@ -38,11 +38,8 @@ namespace ClubMed.Models.EntityFramework
         [Column("clu_altitudeclub", TypeName = "char(10)")]
         public string AltitudeClub { get; set; } = null!;
 
-        [ForeignKey("IdClub")]
         public virtual Club Club { get; set; } = null!;
 
-        [ForeignKey("IdStation")]
         public virtual Station Station { get; set; } = null!;
-
     }
 }

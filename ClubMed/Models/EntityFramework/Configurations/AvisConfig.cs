@@ -54,12 +54,6 @@ namespace ClubMed.Models.EntityFramework.Configurations
                    .OnDelete(DeleteBehavior.Cascade)
                    .HasConstraintName("fk_avis_client");
 
-            builder.HasMany(a => a.PhotoAvis)
-                    .WithOne(p => p.Avis)
-                    .HasForeignKey(p => p.NumAvis)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("fk_photoavis_avis");
-
             
         }
     }

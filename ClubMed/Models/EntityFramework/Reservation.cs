@@ -59,17 +59,12 @@ namespace ClubMed.Models.EntityFramework
         [Column("res_veutannuler")]
         public bool? IsDemandeAnnulation { get; set; } = false;
 
-        [ForeignKey(nameof(TransportId))]
-        [InverseProperty(nameof(Models.EntityFramework.Transport.Reservations))]
         public virtual Transport Transport { get; set; } = null!;
 
-        [InverseProperty(nameof(AutreVoyageur.Reservation))]
         public virtual ICollection<AutreVoyageur> AutresVoyageurs { get; set; } = new List<AutreVoyageur>();
 
-        [InverseProperty(nameof(Transaction.Reservation))]
         public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 
-        [InverseProperty(nameof(ActiviteReservation.Reservation))]
         public virtual ICollection<ActiviteReservation> ActivitesReservations { get; set; } = new List<ActiviteReservation>();
     }
 }
