@@ -28,7 +28,7 @@ namespace ClubMed.Models.EntityFramework.Configurations
             builder.Property(t => t.TransactionDate)
                    .IsRequired()
                    .HasColumnName("trs_datetransaction")
-                   .HasDefaultValueSql("GETDATE()");
+                   .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
             builder.Property(t => t.TransactionMoyenPaiement)
                    .IsRequired()

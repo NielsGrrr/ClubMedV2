@@ -19,5 +19,7 @@ namespace ClubMed.Models.EntityFramework
         public string? NomPays { get; set; }
 
         public virtual ICollection<PaysRegion> PaysRegions { get; set; } = new List<PaysRegion>();
+
+        public virtual ICollection<Club> Clubs { get; set; } = new List<Club>();
     }
 }

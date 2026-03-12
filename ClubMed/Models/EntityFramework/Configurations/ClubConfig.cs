@@ -47,10 +47,10 @@ namespace ClubMed.Models.EntityFramework.Configurations
                 .HasColumnName("clu_statut_mise_en_ligne")
                 .HasDefaultValue("EN_CREATION");
 
-            builder.HasOne(c => c.Pays)
+            builder.HasOne(c => c.SousLocalisation)
                 .WithMany(p => p.Clubs)
                 .HasForeignKey(c => c.NumPays)
-                .HasConstraintName("fk_club_pays");
+                .HasConstraintName("fk_club_souslocalisation");
         }
     }
 }
