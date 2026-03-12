@@ -40,6 +40,8 @@ namespace ClubMed.Models.EntityFramework
         [StringLength(50)]
         public string? StatutMiseEnLigne { get; set; } = "EN_CREATION";
 
+        public virtual PaysRegion? Pays { get; set; }
+
         public virtual ICollection<Avis> Avis { get; set; } = new List<Avis>();
 
         public virtual ICollection<ClubStation> ClubStations { get; set; } = new List<ClubStation>();

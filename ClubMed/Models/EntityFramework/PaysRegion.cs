@@ -14,5 +14,7 @@ namespace ClubMed.Models.EntityFramework
         public virtual Localisation LocalisationAssociee { get; set; } = null!;
 
         public virtual SousLocalisation SousLocalisationAssociee { get; set; } = null!;
+
+        public virtual ICollection<Club> Clubs { get; set; } = new List<Club>();
     }
 }
