@@ -18,13 +18,13 @@ namespace ClubMed.Models.EntityFramework.Configurations
                 .WithMany(c => c.ClubChambres)
                 .HasForeignKey(cc => cc.IdClub)
                 .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("fk_club_chambre_club");
+                .HasConstraintName("fk_clubchambre_club");
 
             builder.HasOne(cc => cc.Chambre)
                 .WithMany(c => c.ClubChambres)
                 .HasForeignKey(cc => cc.NumChambre)
                 .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("fk_club_chambre_chambre");
+                .HasConstraintName("fk_clubchambre_chambre");
         }
     }
 }
