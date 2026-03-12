@@ -23,5 +23,11 @@ CREATE TABLE prix_periode (
 
         [Column("prp_prixperiode", TypeName = "numeric")]
         public decimal? Prix { get; set; }
+
+        [InverseProperty(nameof(Periode.PrixPeriodes))]
+        public virtual Periode Periode { get; set; } = null!;
+
+        [InverseProperty(nameof(TypeChambre.PrixPeriodes))]
+        public virtual TypeChambre TypeChambreNav { get; set; } = null!;
     }
 }

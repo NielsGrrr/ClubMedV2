@@ -18,11 +18,7 @@ namespace ClubMed.Models.EntityFramework.Configurations
             builder.Property(p => p.DateFin).HasColumnType("date");
 
             // 3. Relations
-            builder.HasMany(p => p.PrixPeriodes)
-                .WithOne(pp => pp.Periode)
-                .HasForeignKey(pp => pp.NumPeriode)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("fk_prix_periode_periode");
+
         }
     }
 }
