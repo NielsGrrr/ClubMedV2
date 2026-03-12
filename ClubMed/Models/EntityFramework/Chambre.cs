@@ -10,6 +10,9 @@ namespace ClubMed.Models.EntityFramework
         [Column("cha_num")]
         public int NumChambre { get; set; }
 
+        [Column("tch_id")]
+        public int IdTypeChambre { get; set; }
+
         [InverseProperty(nameof(TypeChambre.Chambres))]
         public virtual TypeChambre Type { get; set; } = null!;
     }
