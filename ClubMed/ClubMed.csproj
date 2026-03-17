@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <Folder Include="DTO\" />
-    <Folder Include="Models\DataManager\" />
     <Folder Include="Services\" />
   </ItemGroup>
 

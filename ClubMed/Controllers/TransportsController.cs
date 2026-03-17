@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using ClubMed.Models.EntityFramework;
 using ClubMed.Models.Repository;
@@ -10,29 +9,29 @@ namespace ClubMed.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClientsController : ControllerBase
+    public class TransportsController : ControllerBase
     {
-        private readonly IDataRepository<Client> dataRepository;
+        private readonly IDataRepository<Transport> dataRepository;
 
-        public ClientsController(IDataRepository<Client> dataRepo)
+        public TransportsController(IDataRepository<Transport> dataRepo)
         {
             dataRepository = dataRepo;
         }
 
-        // GET: api/Clients
+        // GET: api/Transports
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Client>>> GetClients()
+        public async Task<ActionResult<IEnumerable<Transport>>> GetTransports()
         {
             return await dataRepository.GetAllAsync();
         }
 
-        // GET: api/Clients/GetById
+        // GET: api/Transports/GetById
         [HttpGet]
         [Route("[action]/{id}")]
         [ActionName("GetById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Client>> GetById(int id)
+        public async Task<ActionResult<Transport>> GetById(int id)
         {
             var result = await dataRepository.GetByIdAsync(id);
 
@@ -44,32 +43,14 @@ namespace ClubMed.Controllers
             return result;
         }
 
-        // GET: api/Clients/GetByEmail
-        [HttpGet]
-        [Route("[action]/{email}")]
-        [ActionName("GetByEmail")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Client>> GetByEmail(string email)
-        {
-            var result = await dataRepository.GetByStringAsync(email);
-
-            if (result.Value == null)
-            {
-                return NotFound();
-            }
-
-            return result;
-        }
-
-        // PUT: api/Clients
+        // PUT: api/Transports
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> PutClient(int id, Client client)
+        public async Task<IActionResult> PutTransport(int id, Transport transport)
         {
-            if (id != client.NumClient)
+            if (id != transport.TransportId)
             {
                 return BadRequest();
             }
@@ -82,30 +63,30 @@ namespace ClubMed.Controllers
             }
             else
             {
-                await dataRepository.UpdateAsync(result.Value, client);
+                await dataRepository.UpdateAsync(result.Value, transport);
                 return NoContent();
             }
         }
 
-        // POST: api/Clients
+        // POST: api/Transports
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Client>> PostClient(Client client)
+        public async Task<ActionResult<Transport>> PostTransport(Transport transport)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            await dataRepository.AddAsync(client);
+            await dataRepository.AddAsync(transport);
 
-            return CreatedAtAction("GetById", new { id = client.NumClient }, client);
+            return CreatedAtAction("GetById", new { id = transport.TransportId }, transport);
         }
 
-        // DELETE: api/Clients/5
+        // DELETE: api/Transports
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteClient(int id)
+        public async Task<IActionResult> DeleteTransport(int id)
         {
             var result = await dataRepository.GetByIdAsync(id);
             if (result.Value == null)
