@@ -1,5 +1,7 @@
 
+using ClubMed.Models.DataManager;
 using ClubMed.Models.EntityFramework;
+using ClubMed.Models.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClubMed
@@ -14,7 +16,6 @@ namespace ClubMed
 
             builder.Services.AddControllers().AddJsonOptions(options =>
             {
-                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
             });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -26,6 +27,7 @@ namespace ClubMed
                        .UseLoggerFactory(ClubMedDbContext.MyLoggerFactory)
                        .EnableSensitiveDataLogging()
             );
+            builder.Services.AddScoped<IDataRepository<Avis>, AvisManager>();
 
             var app = builder.Build();
 

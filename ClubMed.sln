@@ -5,6 +5,8 @@ VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubMed", "ClubMed\ClubMed.csproj", "{69825A50-8157-4F50-834B-0B4D0FD160FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubMedTests", "ClubMedTests\ClubMedTests.csproj", "{0D9C381B-176E-4A3A-B503-AD0926649A02}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{69825A50-8157-4F50-834B-0B4D0FD160FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69825A50-8157-4F50-834B-0B4D0FD160FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69825A50-8157-4F50-834B-0B4D0FD160FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D9C381B-176E-4A3A-B503-AD0926649A02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D9C381B-176E-4A3A-B503-AD0926649A02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D9C381B-176E-4A3A-B503-AD0926649A02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D9C381B-176E-4A3A-B503-AD0926649A02}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
