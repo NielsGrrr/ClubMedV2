@@ -1,43 +1,48 @@
 ﻿using ClubMed.Models.EntityFramework;
 using ClubMed.Models.EntityFramework.Configurations;
 using ClubMed.Models.Repository;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace ClubMed.Models.DataManager
 {
     public class LocalisationManager : IDataRepository<Localisation>
     {
-        readonly LocalisationConfiguration? localisationDbContext;
+        readonly ClubMedDbContext? clubMedDbContext;
 
-        public LocalisationManager() { }
-
-        public LocalisationManager(LocalisationConfiguration context)
+        public LocalisationManager(ClubMedDbContext context)
         {
-            localisationDbContext = context;
+            clubMedDbContext = context;
         }
 
-        public Task AddAsync(Localisation entity)
+        public async Task AddAsync(Localisation entity)
         {
-            return await filmsDbContext.Utilisateurs.ToListAsync();
+            await clubMedDbContext.Localisations.AddAsync(entity);
+            await clubMedDbContext.SaveChangesAsync();
+
         }
 
-        public Task DeleteAsync(Localisation entity)
+        public async Task DeleteAsync(Localisation entity)
         {
-            throw new NotImplementedException();
+            clubMedDbContext.Localisations.Remove(entity);
+            await clubMedDbContext.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<Localisation>> GetAllAsync()
+
+        public async Task<ActionResult<IEnumerable<Localisation>>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await clubMedDbContext.Localisations.ToListAsync();
         }
 
-        public Task<Localisation?> GetByIdAsync(int id)
+        public async Task<ActionResult<Localisation?>> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await clubMedDbContext.Localisations.FirstOrDefaultAsync(l => l.NumLocalisation == id);
         }
 
-        public Task<Localisation?> GetByStringAsync(string str)
+        public async Task<ActionResult<Localisation?>>  GetByStringAsync(string nomLoc)
         {
-            throw new NotImplementedException();
+            return await clubMedDbContext.Localisations.FirstOrDefaultAsync(l => l.NomLocalisation.ToUpper() == nomLoc.ToUpper());
         }
 
         public Task UpdateAsync(Localisation entityToUpdate, Localisation entity)
