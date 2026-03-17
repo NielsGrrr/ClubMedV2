@@ -25,7 +25,8 @@ namespace ClubMed.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<LieuRestauration>>> GetLieuxRestauration()
         {
-            return await dataRepository.GetAllAsync();
+            var lieurRestaurationList =  await dataRepository.GetAllAsync();
+            return lieurRestaurationList.ToList();
         }
 
         // GET: api/LieuRestaurations/5
@@ -60,7 +61,7 @@ namespace ClubMed.Controllers
             }
             else
             {
-                await dataRepository.UpdateAsync(lieuRestaurationToUpdate.Value, lieuRestauration);
+                await dataRepository.UpdateAsync(lieuRestaurationToUpdate, lieuRestauration);
                 return NoContent();
             }
 
@@ -91,7 +92,7 @@ namespace ClubMed.Controllers
                 return NotFound();
             }
 
-            await dataRepository.DeleteAsync(lieuRestauration.Value);
+            await dataRepository.DeleteAsync(lieuRestauration);
             
 
             return NoContent();

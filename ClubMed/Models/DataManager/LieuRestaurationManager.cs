@@ -28,17 +28,17 @@ namespace ClubMed.Models.DataManager
             await clubMedDbContext.SaveChangesAsync();
         }
 
-        public async Task<ActionResult<IEnumerable<LieuRestauration>>> GetAllAsync()
+        public async Task<IEnumerable<LieuRestauration>> GetAllAsync()
         {
             return await clubMedDbContext!.LieuxRestauration.ToListAsync();
         }
 
-        public async Task<ActionResult<LieuRestauration?>> GetByIdAsync(int id)
+        public async Task<LieuRestauration?> GetByIdAsync(int id)
         {
             return await clubMedDbContext!.LieuxRestauration.FirstOrDefaultAsync(l => l.NumRestauration == id);
         }
 
-        public async Task<ActionResult<LieuRestauration?>> GetByStringAsync(string str)
+        public async Task<LieuRestauration?> GetByStringAsync(string str)
         {
             // Recherche par le nom du lieu (à vérifier selon ton modèle)
             return await clubMedDbContext!.LieuxRestauration.FirstOrDefaultAsync(l => l.Nom == str);

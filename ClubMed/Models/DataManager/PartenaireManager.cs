@@ -28,17 +28,17 @@ namespace ClubMed.Models.DataManager
             await clubMedDbContext.SaveChangesAsync();
         }
 
-        public async Task<ActionResult<IEnumerable<Partenaire>>> GetAllAsync()
+        public async Task<IEnumerable<Partenaire>> GetAllAsync()
         {
             return await clubMedDbContext!.Partenaires.ToListAsync();
         }
 
-        public async Task<ActionResult<Partenaire?>> GetByIdAsync(int id)
+        public async Task<Partenaire?> GetByIdAsync(int id)
         {
             return await clubMedDbContext!.Partenaires.FirstOrDefaultAsync(p => p.PartenaireId == id);
         }
 
-        public async Task<ActionResult<Partenaire?>> GetByStringAsync(string str)
+        public async Task<Partenaire?> GetByStringAsync(string str)
         {
             return await clubMedDbContext!.Partenaires.FirstOrDefaultAsync(p => p.PartenaireNom == str);
         }

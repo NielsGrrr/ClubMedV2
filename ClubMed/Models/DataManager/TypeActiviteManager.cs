@@ -28,17 +28,17 @@ namespace ClubMed.Models.DataManager
             await clubMedDbContext.SaveChangesAsync();
         }
 
-        public async Task<ActionResult<IEnumerable<TypeActivite>>> GetAllAsync()
+        public async Task<IEnumerable<TypeActivite>> GetAllAsync()
         {
             return await clubMedDbContext!.TypesActivites.ToListAsync();
         }
 
-        public async Task<ActionResult<TypeActivite?>> GetByIdAsync(int id)
+        public async Task<TypeActivite?> GetByIdAsync(int id)
         {
             return await clubMedDbContext!.TypesActivites.FirstOrDefaultAsync(t => t.TypeActiviteNum == id);
         }
 
-        public async Task<ActionResult<TypeActivite?>> GetByStringAsync(string str)
+        public async Task<TypeActivite?> GetByStringAsync(string str)
         {
             // On cherche par le nom du type (à vérifier dans ton modèle TypeActivite)
             return await clubMedDbContext!.TypesActivites.FirstOrDefaultAsync(t => t.TypeActiviteTitre == str); // Remplace NomType par la bonne propriété si besoin

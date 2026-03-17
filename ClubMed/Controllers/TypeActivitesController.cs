@@ -25,7 +25,8 @@ namespace ClubMed.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TypeActivite>>> GetTypesActivites()
         {
-            return await dataRepository.GetAllAsync();
+            var typeActiviteList = await dataRepository.GetAllAsync();
+            return typeActiviteList.ToList();
         }
 
         // GET: api/TypeActivites/5
@@ -59,7 +60,7 @@ namespace ClubMed.Controllers
             }
             else
             {
-                await dataRepository.UpdateAsync(typeActiviteToUpdate.Value, typeActivite);
+                await dataRepository.UpdateAsync(typeActiviteToUpdate, typeActivite);
                 return NoContent();
             }
         }
@@ -88,7 +89,7 @@ namespace ClubMed.Controllers
                 return NotFound();
             }
 
-            await dataRepository.DeleteAsync(typeActivite.Value);
+            await dataRepository.DeleteAsync(typeActivite);
 
             return NoContent();
         }

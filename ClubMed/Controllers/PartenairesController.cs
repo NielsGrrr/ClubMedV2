@@ -25,7 +25,8 @@ namespace ClubMed.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Partenaire>>> GetPartenaires()
         {
-            return await dataRepository.GetAllAsync();
+            var partenaireList = await dataRepository.GetAllAsync();
+            return partenaireList.ToList();
         }
 
         // GET: api/Partenaires/5
@@ -60,7 +61,7 @@ namespace ClubMed.Controllers
             else
             {
                 // Exactement comme ton modèle : on passe l'ancien et le nouveau
-                await dataRepository.UpdateAsync(partenaireToUpdate.Value, partenaire);
+                await dataRepository.UpdateAsync(partenaireToUpdate, partenaire);
                 return NoContent();
             }
         }
@@ -89,7 +90,7 @@ namespace ClubMed.Controllers
                 return NotFound();
             }
 
-            await dataRepository.DeleteAsync(partenaire.Value);
+            await dataRepository.DeleteAsync(partenaire);
 
             return NoContent();
         }
