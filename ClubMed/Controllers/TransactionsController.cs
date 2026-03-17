@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ClubMed.Models.EntityFramework;
 using ClubMed.Models.Repository;
@@ -22,10 +23,11 @@ namespace ClubMed.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactions()
         {
-            return await dataRepository.GetAllAsync();
+            var transactions = await dataRepository.GetAllAsync();
+            return transactions.ToList();
         }
 
-        // GET: api/Transactions/GetById
+        // GET: api/Transactions/GetById/5
         [HttpGet]
         [Route("[action]/{id}")]
         [ActionName("GetById")]
@@ -33,17 +35,17 @@ namespace ClubMed.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Transaction>> GetById(int id)
         {
-            var result = await dataRepository.GetByIdAsync(id);
+            var transaction = await dataRepository.GetByIdAsync(id);
 
-            if (result.Value == null)
+            if (transaction == null)
             {
                 return NotFound();
             }
 
-            return result;
+            return transaction;
         }
 
-        // PUT: api/Transactions
+        // PUT: api/Transactions/5
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -55,15 +57,15 @@ namespace ClubMed.Controllers
                 return BadRequest();
             }
 
-            var result = await dataRepository.GetByIdAsync(id);
+            var transactionToUpdate = await dataRepository.GetByIdAsync(id);
 
-            if (result.Value == null)
+            if (transactionToUpdate == null)
             {
                 return NotFound();
             }
             else
             {
-                await dataRepository.UpdateAsync(result.Value, transaction);
+                await dataRepository.UpdateAsync(transactionToUpdate, transaction);
                 return NoContent();
             }
         }
@@ -84,17 +86,17 @@ namespace ClubMed.Controllers
             return CreatedAtAction("GetById", new { id = transaction.TransactionId }, transaction);
         }
 
-        // DELETE: api/Transactions
+        // DELETE: api/Transactions/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTransaction(int id)
         {
-            var result = await dataRepository.GetByIdAsync(id);
-            if (result.Value == null)
+            var transaction = await dataRepository.GetByIdAsync(id);
+            if (transaction == null)
             {
                 return NotFound();
             }
 
-            await dataRepository.DeleteAsync(result.Value);
+            await dataRepository.DeleteAsync(transaction);
 
             return NoContent();
         }

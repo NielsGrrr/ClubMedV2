@@ -23,10 +23,11 @@ namespace ClubMed.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Client>>> GetClients()
         {
-            return await dataRepository.GetAllAsync();
+            var clients = await dataRepository.GetAllAsync();
+            return clients.ToList();
         }
 
-        // GET: api/Clients/GetById
+        // GET: api/Clients/GetById/5
         [HttpGet]
         [Route("[action]/{id}")]
         [ActionName("GetById")]
@@ -34,17 +35,17 @@ namespace ClubMed.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Client>> GetById(int id)
         {
-            var result = await dataRepository.GetByIdAsync(id);
+            var client = await dataRepository.GetByIdAsync(id);
 
-            if (result.Value == null)
+            if (client == null)
             {
                 return NotFound();
             }
 
-            return result;
+            return client;
         }
 
-        // GET: api/Clients/GetByEmail
+        // GET: api/Clients/GetByEmail/test@test.com
         [HttpGet]
         [Route("[action]/{email}")]
         [ActionName("GetByEmail")]
@@ -52,17 +53,17 @@ namespace ClubMed.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Client>> GetByEmail(string email)
         {
-            var result = await dataRepository.GetByStringAsync(email);
+            var client = await dataRepository.GetByStringAsync(email);
 
-            if (result.Value == null)
+            if (client == null)
             {
                 return NotFound();
             }
 
-            return result;
+            return client;
         }
 
-        // PUT: api/Clients
+        // PUT: api/Clients/5
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -74,15 +75,15 @@ namespace ClubMed.Controllers
                 return BadRequest();
             }
 
-            var result = await dataRepository.GetByIdAsync(id);
+            var clientToUpdate = await dataRepository.GetByIdAsync(id);
 
-            if (result.Value == null)
+            if (clientToUpdate == null)
             {
                 return NotFound();
             }
             else
             {
-                await dataRepository.UpdateAsync(result.Value, client);
+                await dataRepository.UpdateAsync(clientToUpdate, client);
                 return NoContent();
             }
         }
@@ -107,13 +108,13 @@ namespace ClubMed.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteClient(int id)
         {
-            var result = await dataRepository.GetByIdAsync(id);
-            if (result.Value == null)
+            var client = await dataRepository.GetByIdAsync(id);
+            if (client == null)
             {
                 return NotFound();
             }
 
-            await dataRepository.DeleteAsync(result.Value);
+            await dataRepository.DeleteAsync(client);
 
             return NoContent();
         }

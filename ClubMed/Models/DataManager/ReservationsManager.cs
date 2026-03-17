@@ -14,17 +14,17 @@ namespace ClubMed.Models.DataManager
             _context = context;
         }
 
-        public async Task<ActionResult<IEnumerable<Reservation>>> GetAllAsync()
+        public async Task<IEnumerable<Reservation>> GetAllAsync()
         {
            return await _context.Reservations.ToListAsync();
         }
         
-        public async Task<ActionResult<Reservation?>> GetByIdAsync(int id)
+        public async Task<Reservation?> GetByIdAsync(int id)
         {
             return await _context.Reservations.FindAsync(id);
         }
 
-        public Task<ActionResult<Reservation?>> GetByStringAsync(string str)
+        public Task<Reservation?> GetByStringAsync(string str)
         { 
             throw new NotImplementedException(); 
         }

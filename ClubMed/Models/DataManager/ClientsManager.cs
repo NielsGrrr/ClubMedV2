@@ -14,17 +14,17 @@ namespace ClubMed.Models.DataManager
             _context = context;
         }
 
-        public async Task<ActionResult<IEnumerable<Client>>> GetAllAsync()
+        public async Task<IEnumerable<Client>> GetAllAsync()
         {
             return await _context.Clients.ToListAsync();
         }
 
-        public async Task<ActionResult<Client?>> GetByIdAsync(int id)
+        public async Task<Client?> GetByIdAsync(int id)
         {
             return await _context.Clients.FindAsync(id);
         }
 
-        public async Task<ActionResult<Client?>> GetByStringAsync(string str)
+        public async Task<Client?> GetByStringAsync(string str)
         {
             return await _context.Clients.FirstOrDefaultAsync(c => c.Email == str);
         }
