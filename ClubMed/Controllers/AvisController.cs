@@ -26,7 +26,8 @@ namespace ClubMed.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Avis>>> GetAvis()
         {
-            return await dataRepository.GetAllAsync();
+            var listeAvis = await dataRepository.GetAllAsync();
+            return listeAvis.ToList();
         }
 
         // GET: api/Avis/5
@@ -37,7 +38,7 @@ namespace ClubMed.Controllers
         {
             var avis = await dataRepository.GetByIdAsync(id);
 
-            if (avis == null || avis.Value == null )
+            if (avis == null )
             {
                 return NotFound();
             }
@@ -53,7 +54,7 @@ namespace ClubMed.Controllers
             /* var utilisateur = await _context.Utilisateurs
                 .FirstOrDefaultAsync(u => u.Mail == email); */
             var avis = await dataRepository.GetByStringAsync(titre);
-            if (avis == null || avis.Value == null)
+            if (avis == null)
             {
                 return NotFound();
             }
@@ -82,7 +83,7 @@ namespace ClubMed.Controllers
             }
             else
             {
-                await dataRepository.UpdateAsync(avisToUpdate.Value, avis);
+                await dataRepository.UpdateAsync(avisToUpdate, avis);
                 return NoContent();
             }
 
@@ -116,7 +117,7 @@ namespace ClubMed.Controllers
                 return NotFound();
             }
 
-            await dataRepository.DeleteAsync(avis.Value);
+            await dataRepository.DeleteAsync(avis);
 
             return NoContent();
         }
