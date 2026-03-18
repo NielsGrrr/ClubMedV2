@@ -29,6 +29,11 @@ namespace ClubMed
             );
             builder.Services.AddScoped<IDataRepository<Avis>, AvisManager>();
 
+            builder.Services.AddScoped<IDataRepository<Client>, ClientManager>();
+            builder.Services.AddScoped<IDataRepository<Reservation>, ReservationManager>();
+            builder.Services.AddScoped<IDataRepository<Transaction>, TransactionManager>();
+            builder.Services.AddScoped<IDataRepository<Transport>, TransportManager>();
+
             var app = builder.Build();
 
 
