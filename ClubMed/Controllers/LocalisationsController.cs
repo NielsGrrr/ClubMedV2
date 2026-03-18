@@ -58,17 +58,14 @@ namespace ClubMed.Controllers
             var localisationToUpdate = await dataRepository.GetByIdAsync(id);
 
             if (localisationToUpdate == null)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                await dataRepository.UpdateAsync(localisationToUpdate, localisation);
-                return NoContent();
-                }
+            {
+                return NotFound();
             }
-
+            else
+            {
+            await dataRepository.UpdateAsync(localisationToUpdate, localisation);
             return NoContent();
+            }
         }
 
         // POST: api/Localisations

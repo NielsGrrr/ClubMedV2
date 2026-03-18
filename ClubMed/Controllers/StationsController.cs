@@ -62,7 +62,7 @@ namespace ClubMed.Controllers
         
         // PUT: api/Stations/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        /*[HttpPut("{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> PutStation(int id, Station station)
         {
             if (id != station.IdStation)
@@ -81,7 +81,7 @@ namespace ClubMed.Controllers
                 await dataRepository.UpdateAsync(stationToUpdate, station);
                 return NoContent();
             }
-        }*/
+        }
 
         // POST: api/Stations
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
