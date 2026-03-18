@@ -26,8 +26,8 @@ namespace ClubMed.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Avis>>> GetAvis()
         {
-            var avis = await dataRepository.GetAllAsync();
-            return avis.ToList();
+            var listeAvis = await dataRepository.GetAllAsync();
+            return listeAvis.ToList();
         }
 
         // GET: api/Avis/5
@@ -38,7 +38,7 @@ namespace ClubMed.Controllers
         {
             var avis = await dataRepository.GetByIdAsync(id);
 
-            if (avis == null || avis == null )
+            if (avis == null )
             {
                 return NotFound();
             }
@@ -54,7 +54,7 @@ namespace ClubMed.Controllers
             /* var utilisateur = await _context.Utilisateurs
                 .FirstOrDefaultAsync(u => u.Mail == email); */
             var avis = await dataRepository.GetByStringAsync(titre);
-            if (avis == null || avis == null)
+            if (avis == null)
             {
                 return NotFound();
             }

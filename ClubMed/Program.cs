@@ -34,6 +34,12 @@ namespace ClubMed
             builder.Services.AddScoped<IDataRepository<Transaction>, TransactionManager>();
             builder.Services.AddScoped<IDataRepository<Transport>, TransportManager>();
 
+            // Add Data Managers
+            builder.Services.AddScoped<IDataRepository<Equipement>, EquipementManager>();
+            builder.Services.AddScoped<IDataRepository<Service>, ServiceManager>();
+            builder.Services.AddScoped<IDataRepository<Photo>, PhotoManager>();
+            builder.Services.AddScoped<IDataRepository<Periode>, PeriodeManager>();
+
             var app = builder.Build();
 
 
