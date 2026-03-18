@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -51,7 +51,7 @@ namespace ClubMed.Controllers
         public async Task<ActionResult<Avis>> GetUtilisateurByEmail(string titre)
         {
             /* var utilisateur = await _context.Utilisateurs
-                .FirstOrDefaultAsync(u => u.Mail == email); */
+                .FirstOrDefaultAsync(u => u.Mail == email); *//*
             var avis = await dataRepository.GetByStringAsync(titre);
             if (avis == null || avis.Value == null)
             {
@@ -124,6 +124,7 @@ namespace ClubMed.Controllers
         /*private bool AvisExists(int id)
         {
             return _context.Avis.Any(e => e.NumAvis == id);
-        }*/
+        }*//*
     }
 }
+*/

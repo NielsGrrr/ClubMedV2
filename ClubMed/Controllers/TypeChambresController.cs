@@ -32,7 +32,7 @@ namespace ClubMed.Controllers
 
         // GET: api/TypeChambres/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TypeChambre>> GetTypeChambre(int id)
+        public async Task<ActionResult<TypeChambre>> GetTypeChambreById(int id)
         {
             var typeChambre = await dataRepository.GetByIdAsync(id);
 
@@ -79,7 +79,7 @@ namespace ClubMed.Controllers
 
             await dataRepository.AddAsync(typeChambre);
 
-            return CreatedAtAction("GetById", new { id = typeChambre.IdTypeChambre }, typeChambre);
+            return CreatedAtAction("GetTypeChambreById", new { id = typeChambre.IdTypeChambre }, typeChambre);
         }
 
         // DELETE: api/TypeChambres/5

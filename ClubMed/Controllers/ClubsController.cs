@@ -78,7 +78,7 @@ namespace ClubMed.Controllers
 
             await dataRepository.AddAsync(club);
 
-            return CreatedAtAction("GetLocalisation", new { id = club.IdClub }, club);
+            return CreatedAtAction("GetClubByID", new { id = club.IdClub }, club);
         }
 
         // DELETE: api/Clubs/5

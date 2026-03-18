@@ -27,10 +27,12 @@ namespace ClubMed
                        .UseLoggerFactory(ClubMedDbContext.MyLoggerFactory)
                        .EnableSensitiveDataLogging()
             );
-            builder.Services.AddScoped<IDataRepository<Avis>, AvisManager>();
+            //builder.Services.AddScoped<IDataRepository<Avis>, AvisManager>();
 
             builder.Services.AddScoped<IDataRepository<Station>, StationManager>();
             builder.Services.AddScoped<IDataRepository<Localisation>, LocalisationManager>();
+            builder.Services.AddScoped<IDataRepository<Club>, ClubManager>();
+            builder.Services.AddScoped<IDataRepository<TypeChambre>, TypeChambreManager>();
 
             var app = builder.Build();
 

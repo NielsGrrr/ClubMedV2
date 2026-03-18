@@ -95,7 +95,7 @@ namespace ClubMed.Controllers
 
             await dataRepository.AddAsync(station);
 
-            return CreatedAtAction("GetById", new { id = station.IdStation}, station);
+            return CreatedAtAction("GetStationById", new { id = station.IdStation}, station);
         }
 
         // DELETE: api/Stations/5
