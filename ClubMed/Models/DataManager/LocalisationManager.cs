@@ -1,6 +1,7 @@
 ﻿using ClubMed.Models.EntityFramework;
 using ClubMed.Models.EntityFramework.Configurations;
 using ClubMed.Models.Repository;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
@@ -19,6 +20,7 @@ namespace ClubMed.Models.DataManager
         {
             await clubMedDbContext.Localisations.AddAsync(entity);
             await clubMedDbContext.SaveChangesAsync();
+
         }
 
         public async Task DeleteAsync(Localisation entity)

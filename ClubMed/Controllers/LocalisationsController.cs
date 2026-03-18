@@ -14,6 +14,7 @@ namespace ClubMed.Controllers
     [ApiController]
     public class LocalisationsController : ControllerBase
     {
+        private readonly ClubMedDbContext _context;
 
         private readonly IDataRepository<Localisation> dataRepository;
 
@@ -57,14 +58,17 @@ namespace ClubMed.Controllers
             var localisationToUpdate = await dataRepository.GetByIdAsync(id);
 
             if (localisationToUpdate == null)
-            {
-                return NotFound();
-            }
-            else
-            {
+                {
+                    return NotFound();
+                }
+                else
+                {
                 await dataRepository.UpdateAsync(localisationToUpdate, localisation);
                 return NoContent();
+                }
             }
+
+            return NoContent();
         }
 
         // POST: api/Localisations
@@ -95,6 +99,11 @@ namespace ClubMed.Controllers
             await dataRepository.DeleteAsync(localisation);
 
             return NoContent();
+        }
+
+        private bool LocalisationExists(int id)
+        {
+            return _context.Localisations.Any(e => e.NumLocalisation == id);
         }
     }
 }

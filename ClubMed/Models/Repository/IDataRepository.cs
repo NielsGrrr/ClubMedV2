@@ -1,4 +1,6 @@
-﻿namespace ClubMed.Models.Repository
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace ClubMed.Models.Repository
 {
     public interface IDataRepository<TEntity>
     {

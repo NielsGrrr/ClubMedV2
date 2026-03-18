@@ -1,5 +1,7 @@
 
+using ClubMed.Models.DataManager;
 using ClubMed.Models.EntityFramework;
+using ClubMed.Models.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClubMed
@@ -26,6 +28,9 @@ namespace ClubMed
                        .UseLoggerFactory(ClubMedDbContext.MyLoggerFactory)
                        .EnableSensitiveDataLogging()
             );
+
+            builder.Services.AddScoped<IDataRepository<Station>, StationManager>();
+            builder.Services.AddScoped<IDataRepository<Localisation>, LocalisationManager>();
 
             var app = builder.Build();
 
