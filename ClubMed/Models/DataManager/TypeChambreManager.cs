@@ -39,9 +39,10 @@ namespace ClubMed.Models.DataManager
             throw new NotImplementedException();
         }
 
-        public Task UpdateAsync(TypeChambre entityToUpdate, TypeChambre entity)
+        public async Task UpdateAsync(TypeChambre entityToUpdate, TypeChambre entity)
         {
-            throw new NotImplementedException();
+            clubMedDbContext.Entry(entityToUpdate).CurrentValues.SetValues(entity);
+            await clubMedDbContext.SaveChangesAsync();
         }
     }
 }

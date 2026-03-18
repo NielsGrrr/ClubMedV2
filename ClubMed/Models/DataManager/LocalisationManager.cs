@@ -44,9 +44,10 @@ namespace ClubMed.Models.DataManager
             return await clubMedDbContext.Localisations.FirstOrDefaultAsync(l => l.NomLocalisation.ToUpper() == nomLoc.ToUpper());
         }
 
-        public Task UpdateAsync(Localisation entityToUpdate, Localisation entity)
+        public async Task UpdateAsync(Localisation entityToUpdate, Localisation entity)
         {
-            throw new NotImplementedException();
+            clubMedDbContext.Entry(entityToUpdate).CurrentValues.SetValues(entity);
+            await clubMedDbContext.SaveChangesAsync();
         }
     }
 }

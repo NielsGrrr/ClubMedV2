@@ -42,9 +42,10 @@ namespace ClubMed.Models.DataManager
             return await clubMedDbContext.Stations.FirstOrDefaultAsync(s => s.NomStation.ToUpper() == nomSta.ToUpper());
         }
 
-        public Task UpdateAsync(Station entityToUpdate, Station entity)
+        public async Task UpdateAsync(Station entityToUpdate, Station entity)
         {
-            throw new NotImplementedException();
+            clubMedDbContext.Entry(entityToUpdate).CurrentValues.SetValues(entity);
+            await clubMedDbContext.SaveChangesAsync();
         }
     }
 }
