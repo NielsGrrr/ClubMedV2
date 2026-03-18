@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ClubMed.Models.EntityFramework;
+using ClubMed.Models.Repository;
 
 namespace ClubMed.Controllers
 {
@@ -13,25 +14,27 @@ namespace ClubMed.Controllers
     [ApiController]
     public class LocalisationsController : ControllerBase
     {
-        private readonly ClubMedDbContext _context;
 
-        public LocalisationsController(ClubMedDbContext context)
+        private readonly IDataRepository<Localisation> dataRepository;
+
+        public LocalisationsController(IDataRepository<Localisation> dataRepo)
         {
-            _context = context;
+            dataRepository = dataRepo;
         }
 
         // GET: api/Localisations
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Localisation>>> GetLocalisations()
         {
-            return await _context.Localisations.ToListAsync();
+            var localisations = await dataRepository.GetAllAsync();
+            return localisations.ToList();
         }
 
         // GET: api/Localisations/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Localisation>> GetLocalisation(int id)
+        public async Task<ActionResult<Localisation>> GetLocalisationById(int id)
         {
-            var localisation = await _context.Localisations.FindAsync(id);
+            var localisation = await dataRepository.GetByIdAsync(id);
 
             if (localisation == null)
             {
@@ -51,25 +54,17 @@ namespace ClubMed.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(localisation).State = EntityState.Modified;
+            var localisationToUpdate = await dataRepository.GetByIdAsync(id);
 
-            try
+            if (localisationToUpdate == null)
             {
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
+            else
             {
-                if (!LocalisationExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                await dataRepository.UpdateAsync(localisationToUpdate, localisation);
+                return NoContent();
             }
-
-            return NoContent();
         }
 
         // POST: api/Localisations
@@ -77,8 +72,12 @@ namespace ClubMed.Controllers
         [HttpPost]
         public async Task<ActionResult<Localisation>> PostLocalisation(Localisation localisation)
         {
-            _context.Localisations.Add(localisation);
-            await _context.SaveChangesAsync();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            await dataRepository.AddAsync(localisation);
 
             return CreatedAtAction("GetLocalisation", new { id = localisation.NumLocalisation }, localisation);
         }
@@ -87,21 +86,15 @@ namespace ClubMed.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLocalisation(int id)
         {
-            var localisation = await _context.Localisations.FindAsync(id);
+            var localisation = await dataRepository.GetByIdAsync(id);
             if (localisation == null)
             {
                 return NotFound();
             }
 
-            _context.Localisations.Remove(localisation);
-            await _context.SaveChangesAsync();
+            await dataRepository.DeleteAsync(localisation);
 
             return NoContent();
-        }
-
-        private bool LocalisationExists(int id)
-        {
-            return _context.Localisations.Any(e => e.NumLocalisation == id);
         }
     }
 }
