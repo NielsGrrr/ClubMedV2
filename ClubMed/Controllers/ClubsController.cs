@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ClubMed.Models.EntityFramework;
+using ClubMed.Models.Repository;
 
 namespace ClubMed.Controllers
 {
@@ -13,25 +14,26 @@ namespace ClubMed.Controllers
     [ApiController]
     public class ClubsController : ControllerBase
     {
-        private readonly ClubMedDbContext _context;
+        private readonly IDataRepository<Club> dataRepository;
 
-        public ClubsController(ClubMedDbContext context)
+        public ClubsController(IDataRepository<Club> dataRepo)
         {
-            _context = context;
+            dataRepository = dataRepo;
         }
 
         // GET: api/Clubs
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Club>>> GetClubs()
         {
-            return await _context.Clubs.ToListAsync();
+            var localisations = await dataRepository.GetAllAsync();
+            return localisations.ToList();
         }
 
         // GET: api/Clubs/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Club>> GetClub(int id)
+        public async Task<ActionResult<Club>> GetClubById(int id)
         {
-            var club = await _context.Clubs.FindAsync(id);
+            var club = await dataRepository.GetByIdAsync(id);
 
             if (club == null)
             {
@@ -51,25 +53,17 @@ namespace ClubMed.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(club).State = EntityState.Modified;
+            var clubToUpdate = await dataRepository.GetByIdAsync(id);
 
-            try
+            if (clubToUpdate == null)
             {
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
+            else
             {
-                if (!ClubExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                await dataRepository.UpdateAsync(clubToUpdate, club);
+                return NoContent();
             }
-
-            return NoContent();
         }
 
         // POST: api/Clubs
@@ -77,31 +71,34 @@ namespace ClubMed.Controllers
         [HttpPost]
         public async Task<ActionResult<Club>> PostClub(Club club)
         {
-            _context.Clubs.Add(club);
-            await _context.SaveChangesAsync();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            return CreatedAtAction("GetClub", new { id = club.IdClub }, club);
+            await dataRepository.AddAsync(club);
+
+            return CreatedAtAction("GetLocalisation", new { id = club.IdClub }, club);
         }
 
         // DELETE: api/Clubs/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteClub(int id)
         {
-            var club = await _context.Clubs.FindAsync(id);
+            var club = await dataRepository.GetByIdAsync(id);
             if (club == null)
             {
                 return NotFound();
             }
 
-            _context.Clubs.Remove(club);
-            await _context.SaveChangesAsync();
+            await dataRepository.DeleteAsync(club);
 
             return NoContent();
         }
-
+        /*
         private bool ClubExists(int id)
         {
             return _context.Clubs.Any(e => e.IdClub == id);
-        }
+        }*/
     }
 }

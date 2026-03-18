@@ -14,8 +14,6 @@ namespace ClubMed.Controllers
     [ApiController]
     public class LocalisationsController : ControllerBase
     {
-        private readonly ClubMedDbContext _context;
-
         private readonly IDataRepository<Localisation> dataRepository;
 
         public LocalisationsController(IDataRepository<Localisation> dataRepo)
@@ -97,10 +95,10 @@ namespace ClubMed.Controllers
 
             return NoContent();
         }
-
+        /*
         private bool LocalisationExists(int id)
         {
             return _context.Localisations.Any(e => e.NumLocalisation == id);
-        }
+        }*/
     }
 }
