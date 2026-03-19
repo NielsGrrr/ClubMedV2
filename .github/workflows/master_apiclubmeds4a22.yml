@@ -4,10 +4,10 @@
 name: Build and deploy ASP.Net Core app to Azure Web App - apiclubmeds4a22
 
 on:
-  push:
-    branches:
-      - master
-  workflow_dispatch:
+  workflow_run:
+    workflows: [".NET"]
+    types:
+      - completed
 
 jobs:
   build:
