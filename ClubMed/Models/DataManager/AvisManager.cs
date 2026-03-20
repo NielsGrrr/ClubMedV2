@@ -1,4 +1,4 @@
-﻿/*using ClubMed.Models.EntityFramework;
+﻿using ClubMed.Models.EntityFramework;
 using ClubMed.Models.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -57,4 +57,3 @@ namespace ClubMed.Models.DataManager
         }
     }
 }
-*/
