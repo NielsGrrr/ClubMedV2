@@ -1,5 +1,7 @@
 
+using ClubMed.Models.DataManager;
 using ClubMed.Models.EntityFramework;
+using ClubMed.Models.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClubMed
@@ -14,7 +16,6 @@ namespace ClubMed
 
             builder.Services.AddControllers().AddJsonOptions(options =>
             {
-                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
             });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -26,9 +27,26 @@ namespace ClubMed
                        .UseLoggerFactory(ClubMedDbContext.MyLoggerFactory)
                        .EnableSensitiveDataLogging()
             );
-            builder.Services.AddScoped<Models.Repository.IDataRepository<Partenaire>, Models.DataManager.PartenaireManager>();
-            builder.Services.AddScoped<Models.Repository.IDataRepository<TypeActivite>, Models.DataManager.TypeActiviteManager>();
-            builder.Services.AddScoped<Models.Repository.IDataRepository<LieuRestauration>, Models.DataManager.LieuRestaurationManager>();
+            builder.Services.AddScoped<IDataRepository<Partenaire>, PartenaireManager>();
+            builder.Services.AddScoped<IDataRepository<TypeActivite>, TypeActiviteManager>();
+            builder.Services.AddScoped<IDataRepository<LieuRestauration>, LieuRestaurationManager>();
+            builder.Services.AddScoped<IDataRepository<Avis>, AvisManager>();
+
+            builder.Services.AddScoped<IDataRepository<Station>, StationManager>();
+            builder.Services.AddScoped<IDataRepository<Localisation>, LocalisationManager>();
+            builder.Services.AddScoped<IDataRepository<Club>, ClubManager>();
+            builder.Services.AddScoped<IDataRepository<TypeChambre>, TypeChambreManager>();
+
+            builder.Services.AddScoped<IDataRepository<Client>, ClientManager>();
+            builder.Services.AddScoped<IDataRepository<Reservation>, ReservationManager>();
+            builder.Services.AddScoped<IDataRepository<Transaction>, TransactionManager>();
+            builder.Services.AddScoped<IDataRepository<Transport>, TransportManager>();
+
+            // Add Data Managers
+            builder.Services.AddScoped<IDataRepository<Equipement>, EquipementManager>();
+            builder.Services.AddScoped<IDataRepository<Service>, ServiceManager>();
+            builder.Services.AddScoped<IDataRepository<Photo>, PhotoManager>();
+            builder.Services.AddScoped<IDataRepository<Periode>, PeriodeManager>();
 
             var app = builder.Build();
 
