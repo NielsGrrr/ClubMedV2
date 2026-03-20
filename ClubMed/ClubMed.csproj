@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DTO\**" />
+    <Compile Remove="Services\**" />
+    <Content Remove="DTO\**" />
+    <Content Remove="Services\**" />
+    <EmbeddedResource Remove="DTO\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <None Remove="DTO\**" />
+    <None Remove="Services\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.24" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.24" />
