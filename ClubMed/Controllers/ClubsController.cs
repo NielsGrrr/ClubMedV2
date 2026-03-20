@@ -71,6 +71,13 @@ namespace ClubMed.Controllers
         [HttpPost]
         public async Task<ActionResult<Club>> PostClub(Club club)
         {
+            var existant = await dataRepository.GetByIdAsync(club.IdClub);
+
+            if (existant != null)
+            {
+                return Conflict("Cet élément existe déjà en base de données.");
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

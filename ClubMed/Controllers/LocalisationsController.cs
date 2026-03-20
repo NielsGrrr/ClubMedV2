@@ -71,6 +71,13 @@ namespace ClubMed.Controllers
         [HttpPost]
         public async Task<ActionResult<Localisation>> PostLocalisation(Localisation localisation)
         {
+            var existant = await dataRepository.GetByIdAsync(localisation.NumLocalisation);
+
+            if (existant != null)
+            {
+                return Conflict("Cet élément existe déjà en base de données.");
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

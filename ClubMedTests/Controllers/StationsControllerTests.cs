@@ -161,6 +161,19 @@ namespace ClubMed.Tests.Controllers
         // 4. TESTS POST
         // ==========================================================
         [TestMethod()]
+        public async Task PostStation_InvalidModel_ReturnsBadRequest()
+        {
+            // Arrange
+            controller.ModelState.AddModelError("NomStation", "Requis"); // Simule une erreur de validation
+            var station = new Station();
+            // Act
+            var result = await controller.PostStation(station); // if (!ModelState.IsValid)
+
+            // Assert
+            Assert.IsInstanceOfType(result.Result, typeof(BadRequestObjectResult));
+        }
+
+        [TestMethod()]
         public async Task PostStation_ExistingId_ReturnsConflict()
         {
             // Arrange
@@ -171,7 +184,6 @@ namespace ClubMed.Tests.Controllers
             var result = await controller.PostStation(stationExistante);
 
             // Assert
-            // Rappel : Ce test échouera tant que le Conflict 409 n'est pas géré dans le contrôleur
             Assert.IsInstanceOfType(result.Result, typeof(ConflictObjectResult));
         }
 

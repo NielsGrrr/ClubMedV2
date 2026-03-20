@@ -72,6 +72,13 @@ namespace ClubMed.Controllers
         [HttpPost]
         public async Task<ActionResult<TypeChambre>> PostTypeChambre(TypeChambre typeChambre)
         {
+            var existant = await dataRepository.GetByIdAsync(typeChambre.IdTypeChambre);
+
+            if (existant != null)
+            {
+                return Conflict("Cet élément existe déjà en base de données.");
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

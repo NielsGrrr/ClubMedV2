@@ -132,6 +132,20 @@ namespace ClubMed.Tests.Controllers
         // 4. TESTS POST
         // ==========================================================
         [TestMethod()]
+        public async Task PostClub_InvalidModel_ReturnsBadRequest()
+        {
+            // Arrange
+            controller.ModelState.AddModelError("Titre", "Requis"); // Simule une erreur de validation
+            var club = new Club();
+
+            // Act
+            var result = await controller.PostClub(club); // if (!ModelState.IsValid)
+
+            // Assert
+            Assert.IsInstanceOfType(result.Result, typeof(BadRequestObjectResult));
+        }
+
+        [TestMethod()]
         public async Task PostClub_ExistingId_ReturnsConflict()
         {
             // Arrange
@@ -142,7 +156,6 @@ namespace ClubMed.Tests.Controllers
             var result = await controller.PostClub(clubExistant);
 
             // Assert
-            // Rappel : Ce test échouera tant que tu n'as pas ajouté la vérification de conflit (409) dans PostClub
             Assert.IsInstanceOfType(result.Result, typeof(ConflictObjectResult));
         }
 

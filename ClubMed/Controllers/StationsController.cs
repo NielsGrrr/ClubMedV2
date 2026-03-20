@@ -88,6 +88,13 @@ namespace ClubMed.Controllers
         [HttpPost]
         public async Task<ActionResult<Station>> PostStation(Station station)
         {
+            var existant = await dataRepository.GetByIdAsync(station.IdStation);
+
+            if (existant != null)
+            {
+                return Conflict("Cet élément existe déjà en base de données.");
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

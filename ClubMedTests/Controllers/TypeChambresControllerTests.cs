@@ -132,6 +132,20 @@ namespace ClubMed.Tests.Controllers
         // 4. TESTS POST
         // ==========================================================
         [TestMethod()]
+        public async Task PostTypeChambre_InvalidModel_ReturnsBadRequest()
+        {
+            // Arrange
+            controller.ModelState.AddModelError("TextePresentation", "Requis"); // Simule une erreur de validation
+            var typeChambre = new TypeChambre();
+
+            // Act
+            var result = await controller.PostTypeChambre(typeChambre); // if (!ModelState.IsValid)
+
+            // Assert
+            Assert.IsInstanceOfType(result.Result, typeof(BadRequestObjectResult));
+        }
+
+        [TestMethod()]
         public async Task PostTypeChambre_ExistingId_ReturnsConflict()
         {
             // Arrange
@@ -142,7 +156,6 @@ namespace ClubMed.Tests.Controllers
             var result = await controller.PostTypeChambre(typeExistant);
 
             // Assert
-            // Rappel : Ce test échouera tant que le Conflict 409 n'est pas géré dans le contrôleur
             Assert.IsInstanceOfType(result.Result, typeof(ConflictObjectResult));
         }
 
