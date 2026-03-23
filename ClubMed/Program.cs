@@ -59,7 +59,7 @@ namespace ClubMed
                 app.UseSwaggerUI();
             }
 
-            // Définir la politique CORS
+            // Dï¿½finir la politique CORS
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowVueApp",
