@@ -21,6 +21,18 @@ namespace ClubMed
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            // D�finir la politique CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowVueApp",
+                    policy =>
+                    {
+                        policy.WithOrigins("http://51.83.36.122:8080")
+                              .AllowAnyHeader()
+                              .AllowAnyMethod();
+                    });
+            });
+
             // Add DbContext
             builder.Services.AddDbContext<ClubMedDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
@@ -58,20 +70,6 @@ namespace ClubMed
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
-            // D�finir la politique CORS
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("AllowVueApp",
-                    policy =>
-                    {
-                        policy.WithOrigins("http://51.83.36.122:8080") 
-                              .AllowAnyHeader()
-                              .AllowAnyMethod();
-                    });
-            });
-
-            builder.Services.AddControllers();
 
 
             app.UseRouting();
