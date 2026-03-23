@@ -47,6 +47,10 @@ namespace ClubMed
             builder.Services.AddScoped<IDataRepository<Service>, ServiceManager>();
             builder.Services.AddScoped<IDataRepository<Photo>, PhotoManager>();
             builder.Services.AddScoped<IDataRepository<Periode>, PeriodeManager>();
+            
+
+
+            var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -54,7 +58,6 @@ namespace ClubMed
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            var builder = WebApplication.CreateBuilder(args);
 
             // Définir la politique CORS
             builder.Services.AddCors(options =>
@@ -70,7 +73,6 @@ namespace ClubMed
 
             builder.Services.AddControllers();
 
-            var app = builder.Build();
 
             app.UseRouting();
 
