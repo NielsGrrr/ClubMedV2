@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using ClubMed.Models.EntityFramework;
 using ClubMed.Models.Repository;
 using BCrypt.Net;
@@ -106,9 +108,20 @@ namespace ClubMed.Controllers
                 client.MotDePasseCrypter = BCrypt.Net.BCrypt.HashPassword(client.MotDePasseCrypter);
             }
 
-            await dataRepository.AddAsync(client);
-
-            return CreatedAtAction("GetById", new { id = client.NumClient }, client);
+            try
+            {
+                await dataRepository.AddAsync(client);
+                return CreatedAtAction("GetById", new { id = client.NumClient }, client);
+            }
+            catch (DbUpdateException ex)
+            {
+                // Vérification de la contrainte unique sur l'email
+                if (ex.InnerException is PostgresException pgEx && pgEx.SqlState == "23505")
+                {
+                    return Conflict(new { message = "L'adresse email saisie est déjà associée à un compte existant." });
+                }
+                throw; // Rethrow pour les autres erreurs
+            }
         }
 
         // DELETE: api/Clients/5
