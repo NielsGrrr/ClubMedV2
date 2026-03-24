@@ -102,6 +102,12 @@ namespace ClubMed.Controllers
                 return BadRequest(ModelState);
             }
 
+            // Uniformiser l'email en minuscules pour l'unicité
+            if (!string.IsNullOrEmpty(client.Email))
+            {
+                client.Email = client.Email.ToLowerInvariant();
+            }
+
             // Cryptage du mot de passe avec BCrypt
             if (!string.IsNullOrEmpty(client.MotDePasseCrypter))
             {
