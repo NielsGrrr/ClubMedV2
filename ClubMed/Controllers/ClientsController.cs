@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ClubMed.Models.EntityFramework;
 using ClubMed.Models.Repository;
+using BCrypt.Net;
 
 namespace ClubMed.Controllers
 {
@@ -97,6 +98,12 @@ namespace ClubMed.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            // Cryptage du mot de passe avec BCrypt
+            if (!string.IsNullOrEmpty(client.MotDePasseCrypter))
+            {
+                client.MotDePasseCrypter = BCrypt.Net.BCrypt.HashPassword(client.MotDePasseCrypter);
             }
 
             await dataRepository.AddAsync(client);
