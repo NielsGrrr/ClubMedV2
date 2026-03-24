@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization; // <-- AJOUT IMPORTANT
 
 namespace ClubMed.Models.EntityFramework
 {
@@ -59,12 +60,16 @@ namespace ClubMed.Models.EntityFramework
         [Column("res_veutannuler")]
         public bool? IsDemandeAnnulation { get; set; } = false;
 
-        public virtual Transport Transport { get; set; } = null!;
+        [JsonIgnore]
+        public virtual Transport? Transport { get; set; } = null!;
 
+        [JsonIgnore]
         public virtual ICollection<AutreVoyageur> AutresVoyageurs { get; set; } = new List<AutreVoyageur>();
 
+        [JsonIgnore]
         public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 
+        [JsonIgnore]
         public virtual ICollection<ActiviteReservation> ActivitesReservations { get; set; } = new List<ActiviteReservation>();
     }
 }

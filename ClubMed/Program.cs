@@ -71,6 +71,7 @@ namespace ClubMed
                 app.UseSwaggerUI();
             }
 
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 
@@ -79,10 +80,7 @@ namespace ClubMed
             app.UseAuthorization();
 
             app.MapControllers();
-
-            app.UseHttpsRedirection();
-
-            app.MapControllers();
+            
 
             app.Run();
         }
