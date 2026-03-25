@@ -43,6 +43,34 @@ namespace ClubMed.Controllers
             return club;
         }
 
+        // GET: api/Clubs/5
+        [HttpGet("{idlocalisation}")]
+        public async Task<ActionResult<IEnumerable<Club>>> GetClubByLocalisation(int idLocalisation)
+        {
+            var club = await dataRepository.GetByLocalisationAsync(idLocalisation);
+
+            if (club == null)
+            {
+                return NotFound();
+            }
+
+            return club;
+        }
+
+        // GET: api/Clubs/5
+        [HttpGet("{idtypechambre}")]
+        public async Task<ActionResult<IEnumerable<Club>>> GetClubByTypeChambre(int idTypeChambre)
+        {
+            var club = await dataRepository.GetByTypeChambreAsync(idTypeChambre);
+
+            if (club == null)
+            {
+                return NotFound();
+            }
+
+            return club;
+        }
+
         // PUT: api/Clubs/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

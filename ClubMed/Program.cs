@@ -62,7 +62,7 @@ namespace ClubMed
             // D�finir la politique CORS
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowVueApp",
+                options.AddPolicy("AllowVueApp", 
                     policy =>
                     {
                         policy.WithOrigins("http://51.83.36.122:8080") 
