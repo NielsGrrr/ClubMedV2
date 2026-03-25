@@ -33,7 +33,7 @@ namespace ClubMed.Controllers
         }
 
         // GET: api/Clubs/5
-        [HttpGet("{id}")]
+        [HttpGet("id/{id}")]
         public async Task<ActionResult<Club>> GetClubById(int id)
         {
             var club = await dataRepository.GetByIdAsync(id);
