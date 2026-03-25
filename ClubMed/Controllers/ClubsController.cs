@@ -51,11 +51,8 @@ namespace ClubMed.Controllers
         public async Task<ActionResult<IEnumerable<Club>>> GetClubByLocalisation(int idlocalisation)
         {
             var clubs = await clubManager.GetByLocalisationAsync(idlocalisation);
-
-            if (clubs == null)
-            {
-                return NotFound();
-            }
+            if (clubs == null || !clubs.Any())
+                return NotFound($"Route OK mais aucun club pour le pays {idlocalisation}");
 
             return Ok(clubs);
         }
