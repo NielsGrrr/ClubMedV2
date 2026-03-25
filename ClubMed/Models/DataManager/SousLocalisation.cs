@@ -36,18 +36,23 @@ namespace ClubMed.Models.DataManager
 
         public async Task<SousLocalisation?> GetByIdAsync(int id)
         {
-            return await clubMedDbContext.SousLocalisations.FirstOrDefaultAsync(l => l.NumLocalisation == id);
+            return await clubMedDbContext.SousLocalisations.FirstOrDefaultAsync(l => l.NumPays == id);
         }
 
         public async Task<SousLocalisation?> GetByStringAsync(string nomLoc)
         {
-            return await clubMedDbContext.SousLocalisations.FirstOrDefaultAsync(l => l.NomLocalisation.ToUpper() == nomLoc.ToUpper());
+            return await clubMedDbContext.SousLocalisations.FirstOrDefaultAsync(l => l.NomPays.ToUpper() == nomLoc.ToUpper());
         }
 
         public async Task UpdateAsync(Localisation entityToUpdate, Localisation entity)
         {
             clubMedDbContext.Entry(entityToUpdate).CurrentValues.SetValues(entity);
             await clubMedDbContext.SaveChangesAsync();
+        }
+
+        public Task UpdateAsync(SousLocalisation entityToUpdate, SousLocalisation entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }
