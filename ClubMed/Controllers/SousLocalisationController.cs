@@ -47,7 +47,7 @@ namespace ClubMed.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutSousLocalisation(int id, SousLocalisation sousLocalisation)
         {
-            if (id != sousLocalisation.NumSousLocalisation)
+            if (id != sousLocalisation.NumPays)
             {
                 return BadRequest();
             }
@@ -70,7 +70,7 @@ namespace ClubMed.Controllers
         [HttpPost]
         public async Task<ActionResult<SousLocalisation>> PostSousLocalisation(SousLocalisation sousLocalisation)
         {
-            var existant = await dataRepository.GetByIdAsync(sousLocalisation.NumSousLocalisation);
+            var existant = await dataRepository.GetByIdAsync(sousLocalisation.NumPays);
 
             if (existant != null)
             {
@@ -84,7 +84,7 @@ namespace ClubMed.Controllers
 
             await dataRepository.AddAsync(sousLocalisation);
 
-            return CreatedAtAction("GetSousLocalisationById", new { id = sousLocalisation.NumSousLocalisation }, sousLocalisation);
+            return CreatedAtAction("GetSousLocalisationById", new { id = sousLocalisation.NumPays}, sousLocalisation);
         }
 
         // DELETE: api/SousLocalisations/5

@@ -47,6 +47,7 @@ namespace ClubMed
             builder.Services.AddScoped<IDataRepository<Station>, StationManager>();
             builder.Services.AddScoped<IDataRepository<Localisation>, LocalisationManager>();
             builder.Services.AddScoped<IDataRepository<Club>, ClubManager>();
+            builder.Services.AddScoped<ClubManager>();
             builder.Services.AddScoped<IDataRepository<TypeChambre>, TypeChambreManager>();
 
             builder.Services.AddScoped<IDataRepository<Client>, ClientManager>();
@@ -72,20 +73,6 @@ namespace ClubMed
             }
 
             app.UseHttpsRedirection();
-            
-            // D�finir la politique CORS
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("AllowVueApp",
-                    policy =>
-                    {
-                        policy.WithOrigins("http://51.83.36.122:8080") 
-                              .AllowAnyHeader()
-                              .AllowAnyMethod();
-                    });
-            });
-
-            builder.Services.AddControllers();
 
 
             app.UseRouting();

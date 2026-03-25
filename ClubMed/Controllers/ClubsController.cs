@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ClubMed.Models.EntityFramework;
 using ClubMed.Models.Repository;
+using ClubMed.Models.DataManager;
 
 namespace ClubMed.Controllers
 {
@@ -15,10 +16,12 @@ namespace ClubMed.Controllers
     public class ClubsController : ControllerBase
     {
         private readonly IDataRepository<Club> dataRepository;
+        private readonly ClubManager clubManager;
 
-        public ClubsController(IDataRepository<Club> dataRepo)
+        public ClubsController(IDataRepository<Club> dataRepo, ClubManager clubMan)
         {
             dataRepository = dataRepo;
+            this.clubManager = clubMan;
         }
 
         // GET: api/Clubs
@@ -44,31 +47,31 @@ namespace ClubMed.Controllers
         }
 
         // GET: api/Clubs/5
-        [HttpGet("localisation/{idlocalisation}")]
+        [HttpGet("localisation/{idLocalisation}")]
         public async Task<ActionResult<IEnumerable<Club>>> GetClubByLocalisation(int idLocalisation)
         {
-            var club = await dataRepository.GetByLocalisationAsync(idLocalisation);
+            var clubs = await clubManager.GetByLocalisationAsync(idLocalisation);
 
-            if (club == null)
+            if (clubs == null)
             {
                 return NotFound();
             }
 
-            return club;
+            return Ok(clubs);
         }
 
         // GET: api/Clubs/5
         [HttpGet("typechambre/{idtypechambre}")]
         public async Task<ActionResult<IEnumerable<Club>>> GetClubByTypeChambre(int idTypeChambre)
         {
-            var club = await dataRepository.GetByTypeChambreAsync(idTypeChambre);
+            var clubs = await clubManager.GetByTypeChambreAsync(idTypeChambre);
 
-            if (club == null)
+            if (clubs == null)
             {
                 return NotFound();
             }
 
-            return club;
+            return Ok(clubs);
         }
 
         // PUT: api/Clubs/5
