@@ -47,6 +47,7 @@ namespace ClubMed
             builder.Services.AddScoped<IDataRepository<Station>, StationManager>();
             builder.Services.AddScoped<IDataRepository<Localisation>, LocalisationManager>();
             builder.Services.AddScoped<IDataRepository<Club>, ClubManager>();
+            builder.Services.AddScoped<IClubManager, ClubManager>();
             builder.Services.AddScoped<ClubManager>();
             builder.Services.AddScoped<IDataRepository<TypeChambre>, TypeChambreManager>();
 

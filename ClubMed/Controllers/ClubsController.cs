@@ -16,9 +16,9 @@ namespace ClubMed.Controllers
     public class ClubsController : ControllerBase
     {
         private readonly IDataRepository<Club> dataRepository;
-        private readonly ClubManager clubManager;
+        private readonly IClubManager clubManager;
 
-        public ClubsController(IDataRepository<Club> dataRepo, ClubManager clubMan)
+        public ClubsController(IDataRepository<Club> dataRepo, IClubManager clubMan)
         {
             dataRepository = dataRepo;
             this.clubManager = clubMan;

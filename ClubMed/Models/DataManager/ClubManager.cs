@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ClubMed.Models.DataManager
 {
-    public class ClubManager : IDataRepository<Club>
+    public class ClubManager : IDataRepository<Club>, IClubManager
     {
         readonly ClubMedDbContext? clubMedDbContext;
 
