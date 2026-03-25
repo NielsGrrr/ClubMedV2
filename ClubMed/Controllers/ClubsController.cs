@@ -44,7 +44,7 @@ namespace ClubMed.Controllers
         }
 
         // GET: api/Clubs/5
-        [HttpGet("{idlocalisation}")]
+        [HttpGet("localisation/{idlocalisation}")]
         public async Task<ActionResult<IEnumerable<Club>>> GetClubByLocalisation(int idLocalisation)
         {
             var club = await dataRepository.GetByLocalisationAsync(idLocalisation);
@@ -58,7 +58,7 @@ namespace ClubMed.Controllers
         }
 
         // GET: api/Clubs/5
-        [HttpGet("{idtypechambre}")]
+        [HttpGet("typechambre/{idtypechambre}")]
         public async Task<ActionResult<IEnumerable<Club>>> GetClubByTypeChambre(int idTypeChambre)
         {
             var club = await dataRepository.GetByTypeChambreAsync(idTypeChambre);
