@@ -47,10 +47,10 @@ namespace ClubMed.Controllers
         }
 
         // GET: api/Clubs/5
-        [HttpGet("localisation/{idLocalisation}")]
-        public async Task<ActionResult<IEnumerable<Club>>> GetClubByLocalisation(int idLocalisation)
+        [HttpGet("localisation/{idlocalisation}")]
+        public async Task<ActionResult<IEnumerable<Club>>> GetClubByLocalisation(int idlocalisation)
         {
-            var clubs = await clubManager.GetByLocalisationAsync(idLocalisation);
+            var clubs = await clubManager.GetByLocalisationAsync(idlocalisation);
 
             if (clubs == null)
             {
@@ -62,9 +62,9 @@ namespace ClubMed.Controllers
 
         // GET: api/Clubs/5
         [HttpGet("typechambre/{idtypechambre}")]
-        public async Task<ActionResult<IEnumerable<Club>>> GetClubByTypeChambre(int idTypeChambre)
+        public async Task<ActionResult<IEnumerable<Club>>> GetClubByTypeChambre(int idtypechambre)
         {
-            var clubs = await clubManager.GetByTypeChambreAsync(idTypeChambre);
+            var clubs = await clubManager.GetByTypeChambreAsync(idtypechambre);
 
             if (clubs == null)
             {
