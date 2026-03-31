@@ -42,6 +42,7 @@ namespace ClubMed
             builder.Services.AddScoped<IDataRepository<Partenaire>, PartenaireManager>();
             builder.Services.AddScoped<IDataRepository<TypeActivite>, TypeActiviteManager>();
             builder.Services.AddScoped<IDataRepository<ActiviteAdulte>, ActiviteAdulteManager>();
+            builder.Services.AddScoped<IStripeManager, StripeManager>();
             builder.Services.AddScoped<IDataRepository<LieuRestauration>, LieuRestaurationManager>();
             builder.Services.AddScoped<IDataRepository<Avis>, AvisManager>();
 
