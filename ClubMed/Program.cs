@@ -29,7 +29,7 @@ namespace ClubMed
                 options.AddPolicy("AllowVueApp",
                     policy =>
                     {
-                        policy.WithOrigins("http://51.83.36.122:8080")
+                        policy.WithOrigins("http://51.83.36.122:8080", "http://localhost:8080")
                               .AllowAnyHeader()
                               .AllowAnyMethod();
                     });
@@ -43,6 +43,8 @@ namespace ClubMed
             );
             builder.Services.AddScoped<IDataRepository<Partenaire>, PartenaireManager>();
             builder.Services.AddScoped<IDataRepository<TypeActivite>, TypeActiviteManager>();
+            builder.Services.AddScoped<IDataRepository<ActiviteAdulte>, ActiviteAdulteManager>();
+            builder.Services.AddScoped<IStripeManager, StripeManager>();
             builder.Services.AddScoped<IDataRepository<LieuRestauration>, LieuRestaurationManager>();
             builder.Services.AddScoped<IDataRepository<Avis>, AvisManager>();
 
