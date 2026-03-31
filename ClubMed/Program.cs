@@ -3,6 +3,9 @@ using ClubMed.Models.DataManager;
 using ClubMed.Models.EntityFramework;
 using ClubMed.Models.Repository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace ClubMed
 {
@@ -27,10 +30,31 @@ namespace ClubMed
                 options.AddPolicy("AllowVueApp",
                     policy =>
                     {
-                        policy.WithOrigins("http://51.83.36.122:8080")
+                        policy.WithOrigins("http://51.83.36.122:8080", "http://localhost:5173", "http://localhost:8080")
                               .AllowAnyHeader()
                               .AllowAnyMethod();
                     });
+            });
+
+            // Configure JWT Authentication
+            var jwtKey = builder.Configuration["Jwt:Key"];
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey ?? "DefaultSecretKeyNeedToBeLongEnough123!"))
+                };
             });
 
             // Add DbContext
@@ -77,6 +101,7 @@ namespace ClubMed
 
             app.UseCors("AllowVueApp");
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();
