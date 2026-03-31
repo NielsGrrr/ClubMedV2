@@ -32,7 +32,7 @@ namespace ClubMed.Models.DataManager
 
         public async Task<Club?> GetByIdAsync(int id)
         {
-            return await clubMedDbContext.Clubs.FirstOrDefaultAsync(c => c.IdClub == id);
+            return await clubMedDbContext.Clubs.Include(c => c.TypeChambres).Include(c => c.PhotoClubs).Include(c => c.Avis).FirstOrDefaultAsync(c => c.IdClub == id);
         }
 
         public async Task<IEnumerable<Club>> GetByLocalisationAsync(int idLocalisation)
