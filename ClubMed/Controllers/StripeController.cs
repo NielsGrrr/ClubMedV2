@@ -17,9 +17,8 @@ namespace ClubMed.Controllers
         {
             _configuration = configuration;
             _stripeManager = stripeManager;
-            // On configure ici la clé secrète. Dans un vrai projet, elle vient de secrets.json ou des variables d'environnement.
-            StripeConfiguration.ApiKey = _configuration["Stripe:SecretKey"] ?? "sk_test_VOTRE_VRAIE_CLE_STRIPE_ICI"; 
-            // Note: Si la clé est "sk_test_VOTRE_VRAIE_CLE...", Stripe plantera en 401 Unauthorized. Vous DEVEZ la remplacer.
+            // On récupère la clé via la config pour éviter que Github ne bloque le push
+            StripeConfiguration.ApiKey = _configuration["Stripe:SecretKey"]; 
         }
 
         public class CheckoutSessionRequest
