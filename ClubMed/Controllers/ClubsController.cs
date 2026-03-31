@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ClubMed.Models.EntityFramework;
 using ClubMed.Models.Repository;
+using ClubMed.Models.DataManager;
 
 namespace ClubMed.Controllers
 {
@@ -15,10 +16,12 @@ namespace ClubMed.Controllers
     public class ClubsController : ControllerBase
     {
         private readonly IDataRepository<Club> dataRepository;
+        private readonly IClubManager clubManager;
 
-        public ClubsController(IDataRepository<Club> dataRepo)
+        public ClubsController(IDataRepository<Club> dataRepo, IClubManager clubMan)
         {
             dataRepository = dataRepo;
+            this.clubManager = clubMan;
         }
 
         // GET: api/Clubs
@@ -30,7 +33,7 @@ namespace ClubMed.Controllers
         }
 
         // GET: api/Clubs/5
-        [HttpGet("{id}")]
+        [HttpGet("id/{id}")]
         public async Task<ActionResult<Club>> GetClubById(int id)
         {
             var club = await dataRepository.GetByIdAsync(id);
@@ -41,6 +44,31 @@ namespace ClubMed.Controllers
             }
 
             return club;
+        }
+
+        // GET: api/Clubs/5
+        [HttpGet("localisation/{idlocalisation}")]
+        public async Task<ActionResult<IEnumerable<Club>>> GetClubByLocalisation(int idlocalisation)
+        {
+            var clubs = await clubManager.GetByLocalisationAsync(idlocalisation);
+            if (clubs == null || !clubs.Any())
+                return NotFound($"Route OK mais aucun club pour le pays {idlocalisation}");
+
+            return Ok(clubs);
+        }
+
+        // GET: api/Clubs/5
+        [HttpGet("typechambre/{idtypechambre}")]
+        public async Task<ActionResult<IEnumerable<Club>>> GetClubByTypeChambre(int idtypechambre)
+        {
+            var clubs = await clubManager.GetByTypeChambreAsync(idtypechambre);
+
+            if (clubs == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(clubs);
         }
 
         // PUT: api/Clubs/5

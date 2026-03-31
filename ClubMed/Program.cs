@@ -19,6 +19,8 @@ namespace ClubMed
 
             builder.Services.AddControllers().AddJsonOptions(options =>
             {
+                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+                options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
             });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -65,12 +67,16 @@ namespace ClubMed
             );
             builder.Services.AddScoped<IDataRepository<Partenaire>, PartenaireManager>();
             builder.Services.AddScoped<IDataRepository<TypeActivite>, TypeActiviteManager>();
+            builder.Services.AddScoped<IDataRepository<ActiviteAdulte>, ActiviteAdulteManager>();
+            builder.Services.AddScoped<IStripeManager, StripeManager>();
             builder.Services.AddScoped<IDataRepository<LieuRestauration>, LieuRestaurationManager>();
             builder.Services.AddScoped<IDataRepository<Avis>, AvisManager>();
 
             builder.Services.AddScoped<IDataRepository<Station>, StationManager>();
             builder.Services.AddScoped<IDataRepository<Localisation>, LocalisationManager>();
             builder.Services.AddScoped<IDataRepository<Club>, ClubManager>();
+            builder.Services.AddScoped<IClubManager, ClubManager>();
+            builder.Services.AddScoped<ClubManager>();
             builder.Services.AddScoped<IDataRepository<TypeChambre>, TypeChambreManager>();
 
             builder.Services.AddScoped<IDataRepository<Client>, ClientManager>();
@@ -96,6 +102,7 @@ namespace ClubMed
             }
 
             app.UseHttpsRedirection();
+
 
             app.UseRouting();
 

@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-using ClubMed.Controllers;
+﻿using ClubMed.Controllers;
+using ClubMed.Models.DataManager;
 using ClubMed.Models.EntityFramework;
 using ClubMed.Models.Repository;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,12 +16,14 @@ namespace ClubMed.Tests.Controllers
     {
         private ClubsController controller;
         private Mock<IDataRepository<Club>> mockRepository;
+        private Mock<IClubManager> mockManager;
 
         [TestInitialize()]
         public void TestInitialize()
         {
             mockRepository = new Mock<IDataRepository<Club>>();
-            controller = new ClubsController(mockRepository.Object);
+            mockManager = new Mock<IClubManager>();
+            controller = new ClubsController(mockRepository.Object, mockManager.Object);
         }
 
         [TestCleanup]

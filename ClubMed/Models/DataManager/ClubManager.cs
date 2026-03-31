@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ClubMed.Models.DataManager
 {
-    public class ClubManager : IDataRepository<Club>
+    public class ClubManager : IDataRepository<Club>, IClubManager
     {
         readonly ClubMedDbContext? clubMedDbContext;
 
@@ -32,7 +32,17 @@ namespace ClubMed.Models.DataManager
 
         public async Task<Club?> GetByIdAsync(int id)
         {
-            return await clubMedDbContext.Clubs.FirstOrDefaultAsync(c => c.IdClub == id);
+            return await clubMedDbContext.Clubs.Include(c => c.TypeChambres).Include(c => c.PhotoClubs).Include(c => c.Avis).FirstOrDefaultAsync(c => c.IdClub == id);
+        }
+
+        public async Task<IEnumerable<Club>> GetByLocalisationAsync(int idLocalisation)
+        {
+            return await clubMedDbContext.Clubs.Where(c => c.NumPays == idLocalisation).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Club>> GetByTypeChambreAsync(int idTypeChambre)
+        {
+            return await clubMedDbContext.Clubs.Where(c => c.TypeChambres.Any(tc => tc.IdTypeChambre == idTypeChambre)).ToListAsync();
         }
 
         public Task<Club?> GetByStringAsync(string str)
