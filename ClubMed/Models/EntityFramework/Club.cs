@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -44,6 +44,7 @@ namespace ClubMed.Models.EntityFramework
         [JsonIgnore]
         public virtual Photo? Photo { get; set; }
 
+        [Microsoft.AspNetCore.Mvc.ModelBinding.Validation.ValidateNever]
         public virtual SousLocalisation SousLocalisation { get; set; } = null!;
 
         public virtual ICollection<Avis> Avis { get; set; } = new List<Avis>();
