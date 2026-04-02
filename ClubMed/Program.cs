@@ -109,13 +109,12 @@ namespace ClubMed
 
             var app = builder.Build();
             
-            // Appliquer les migrations automatiquement (Pratique pour Azure)
+            // Appliquer les migrations automatiquement 
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var context = services.GetRequiredService<ClubMedDbContext>();
                     context.Database.Migrate();
                     Console.WriteLine("✅ Database Migrations applied successfully.");
                 }
