@@ -18,12 +18,14 @@ namespace ClubMed.Models.DataManager
         {
            return await _context.Reservations.ToListAsync();
         }
-        
+
         public async Task<Reservation?> GetByIdAsync(int id)
         {
             return await _context.Reservations
                 .Include(r => r.SousReservations)
                     .ThenInclude(sr => sr.SousReservationActivites)
+                .Include(r => r.SousReservations)
+                    .ThenInclude(sr => sr.Transport)
                 .FirstOrDefaultAsync(r => r.ResaNum == id);
         }
 
