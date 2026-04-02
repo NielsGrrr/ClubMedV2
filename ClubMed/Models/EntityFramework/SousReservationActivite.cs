@@ -13,9 +13,9 @@ namespace ClubMed.Models.EntityFramework
         public int ActiviteId { get; set; }
 
         [JsonIgnore]
-        public virtual SousReservation SousReservation { get; set; } = null!;
+        public virtual SousReservation? SousReservation { get; set; } = null!;
 
         [JsonIgnore]
-        public virtual Activite Activite { get; set; } = null!;
+        public virtual Activite? Activite { get; set; } = null!;
     }
 }
