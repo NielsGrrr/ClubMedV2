@@ -24,9 +24,10 @@ namespace ClubMed.Models.EntityFramework.Configurations
                    .HasMaxLength(1024)
                    .HasColumnName("slc_nompays");
 
-            // 4. Relations
-            // Relation vers Photo à configurer ici ultérieurement :
-            // builder.HasOne(s => s.PhotoAssociee)...
+            builder.HasOne(s => s.Photo)
+                               .WithMany()
+                               .HasForeignKey(s => s.NumPhoto)
+                               .HasConstraintName("fk_souslocalisation_photo");
         }
     }
 }

@@ -32,6 +32,11 @@ namespace ClubMed.Models.EntityFramework.Configurations
 
             builder.Property(a => a.PartenaireId)
                    .HasColumnName("act_idpartenaire");
+
+            builder.HasOne(a => a.Partenaire)
+                   .WithMany()
+                   .HasForeignKey(a => a.PartenaireId)
+                   .HasConstraintName("fk_activite_partenaire");
         }
     }
 }

@@ -17,6 +17,17 @@ namespace ClubMed.Models.EntityFramework.Configurations
 
             builder.Property(ca => ca.ActiviteId)
                    .HasColumnName("cla_idactivite");
+
+            builder.HasOne(ca => ca.Club)
+                   .WithMany(c => c.ClubActivites)
+                   .HasForeignKey(ca => ca.ClubId)
+                   .HasConstraintName("fk_clubactivite_club");
+
+            builder.HasOne(ca => ca.Activite)
+                   .WithMany()
+                   .HasForeignKey(ca => ca.ActiviteId)
+                   .HasConstraintName("fk_clubactivite_activite");
+
         }
     }
 }

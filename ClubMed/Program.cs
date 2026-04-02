@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Stripe;
 
 namespace ClubMed
 {
@@ -14,6 +15,18 @@ namespace ClubMed
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // Set global Stripe Secret Key
+            var stripeKey = Environment.GetEnvironmentVariable("STRIPE_SECRET_KEY");
+            if (string.IsNullOrEmpty(stripeKey))
+            {
+                Console.WriteLine("⚠️ WARNING: STRIPE_SECRET_KEY is NOT set in environment variables!");
+            }
+            else
+            {
+                Console.WriteLine($"✅ Stripe Key loaded (begins with: {stripeKey.Substring(0, Math.Min(stripeKey.Length, 7))}...)");
+                StripeConfiguration.ApiKey = stripeKey;
+            }
 
             // Add services to the container.
 
@@ -86,7 +99,7 @@ namespace ClubMed
 
             // Add Data Managers
             builder.Services.AddScoped<IDataRepository<Equipement>, EquipementManager>();
-            builder.Services.AddScoped<IDataRepository<Service>, ServiceManager>();
+            builder.Services.AddScoped<IDataRepository<ClubMed.Models.EntityFramework.Service>, ServiceManager>();
             builder.Services.AddScoped<IDataRepository<Photo>, PhotoManager>();
             builder.Services.AddScoped<IDataRepository<Periode>, PeriodeManager>();
             

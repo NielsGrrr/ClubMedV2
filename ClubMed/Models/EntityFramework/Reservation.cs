@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization; // <-- AJOUT IMPORTANT
+using System.Text.Json.Serialization;
 
 namespace ClubMed.Models.EntityFramework
 {
@@ -23,53 +23,24 @@ namespace ClubMed.Models.EntityFramework
         [Required]
         public int ClientNum { get; set; }
 
-        [Column("res_datedebut")]
-        public DateTime? ResaDateDebut { get; set; }
+        [Column("res_datedebut")] public DateTime? ResaDateDebut { get; set; }
+        [Column("res_datefin")] public DateTime? ResaDateFin { get; set; }
+        [Column("res_nbpersonnes")] public int? ResaNbPersonnes { get; set; }
+        [Column("res_lieudepart")][StringLength(1024)] public string? ResaLieuDepart { get; set; }
+        [Column("res_prix")] public decimal? ResaPrix { get; set; }
+        [Column("res_statut")][Required][StringLength(50)] public string? ResaStatut { get; set; } = "EN_ATTENTE";
+        [Column("res_etatcalcule")][StringLength(20)] public string? ResaEtatCalcule { get; set; }
+        [Column("res_mail")] public bool? ResaMailEnvoye { get; set; } = false;
+        [Column("res_disponibiliteconfirmee")] public bool? IsDispoConfirmee { get; set; } = false;
+        [Column("res_mailconfirmationenvoye")] public bool? IsMailConfirmeEnvoye { get; set; }
+        [Column("res_veutannuler")] public bool? IsDemandeAnnulation { get; set; } = false;
 
-        [Column("res_datefin")]
-        public DateTime? ResaDateFin { get; set; }
+        [JsonIgnore] public virtual Transport? Transport { get; set; } = null!;
+        [JsonIgnore] public virtual Client? Client { get; set; } = null!; // AJOUT
+        [JsonIgnore] public virtual Club? Club { get; set; } = null!; // AJOUT
 
-        [Column("res_nbpersonnes")]
-        public int? ResaNbPersonnes { get; set; }
-
-        [Column("res_lieudepart")]
-        [StringLength(1024)]
-        public string? ResaLieuDepart { get; set; }
-
-        [Column("res_prix")]
-        public decimal? ResaPrix { get; set; }
-
-        [Column("res_statut")]
-        [Required]
-        [StringLength(50)]
-        public string? ResaStatut { get; set; } = "EN_ATTENTE";
-
-        [Column("res_etatcalcule")]
-        [StringLength(20)]
-        public string? ResaEtatCalcule { get; set; }
-
-        [Column("res_mail")]
-        public bool? ResaMailEnvoye { get; set; } = false;
-
-        [Column("res_disponibiliteconfirmee")]
-        public bool? IsDispoConfirmee { get; set; } = false;
-
-        [Column("res_mailconfirmationenvoye")]
-        public bool? IsMailConfirmeEnvoye { get; set; }
-
-        [Column("res_veutannuler")]
-        public bool? IsDemandeAnnulation { get; set; } = false;
-
-        [JsonIgnore]
-        public virtual Transport? Transport { get; set; } = null!;
-
-        [JsonIgnore]
-        public virtual ICollection<AutreVoyageur> AutresVoyageurs { get; set; } = new List<AutreVoyageur>();
-
-        [JsonIgnore]
-        public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
-
-        [JsonIgnore]
-        public virtual ICollection<ActiviteReservation> ActivitesReservations { get; set; } = new List<ActiviteReservation>();
+        [JsonIgnore] public virtual ICollection<AutreVoyageur> AutresVoyageurs { get; set; } = new List<AutreVoyageur>();
+        [JsonIgnore] public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
+        [JsonIgnore] public virtual ICollection<ActiviteReservation> ActivitesReservations { get; set; } = new List<ActiviteReservation>();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ClubMed.Models.EntityFramework
 {
@@ -27,6 +28,9 @@ namespace ClubMed.Models.EntityFramework
 
         [Column("lre_estbar")]
         public bool? EstBar { get; set; }
+
+        [JsonIgnore]
+        public virtual Photo? Photo { get; set; }
 
         public virtual ICollection<ClubRestauration> ClubRestaurations { get; set; } = new List<ClubRestauration>();
     }

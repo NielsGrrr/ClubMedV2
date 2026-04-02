@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ClubMed.Models.EntityFramework
 {
@@ -32,6 +33,9 @@ namespace ClubMed.Models.EntityFramework
         [Required]
         [StringLength(1024)]
         public string? TypeActiviteTitre { get; set; }
+
+        [JsonIgnore]
+        public virtual Photo? Photo { get; set; }
 
         public virtual ICollection<ActiviteAdulte> ActivitesAdultes { get; set; } = new List<ActiviteAdulte>();
     }

@@ -39,6 +39,11 @@ namespace ClubMed.Models.EntityFramework.Configurations
                    .HasForeignKey(ar => ar.ResaNum)
                    .OnDelete(DeleteBehavior.Cascade)
                    .HasConstraintName("fk_activitereservation_reservation");
+
+            builder.HasOne(ar => ar.Activite)
+                   .WithMany()
+                   .HasForeignKey(ar => ar.ActiId)
+                   .HasConstraintName("fk_activitereservation_activite");
         }
     }
 }

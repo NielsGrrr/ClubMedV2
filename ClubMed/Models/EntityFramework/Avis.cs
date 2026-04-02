@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ClubMed.Models.EntityFramework
 {
@@ -36,6 +37,8 @@ namespace ClubMed.Models.EntityFramework
 
         [Column("avi_reponse", TypeName = "text")]
         public string? Reponse { get; set; }
+
+        [JsonIgnore] public virtual Reservation? Reservation { get; set; }
 
         public virtual Club Club { get; set; } = null!;
 

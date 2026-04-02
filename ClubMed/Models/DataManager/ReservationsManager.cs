@@ -1,4 +1,4 @@
-﻿using ClubMed.Models.EntityFramework;
+using ClubMed.Models.EntityFramework;
 using ClubMed.Models.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -43,6 +43,20 @@ namespace ClubMed.Models.DataManager
 
         public async Task DeleteAsync(Reservation entity)
         {
+            // Supprimer d'abord les entités liées pour éviter les violations de contrainte FK
+            var activites = _context.ActivitesReservations
+                .Where(a => a.ResaNum == entity.ResaNum);
+            _context.ActivitesReservations.RemoveRange(activites);
+
+            var voyageurs = _context.AutresVoyageurs
+                .Where(v => v.AutreVoyageurNumResa == entity.ResaNum);
+            _context.AutresVoyageurs.RemoveRange(voyageurs);
+
+            var transactions = _context.Transactions
+                .Where(t => t.ResaNum == entity.ResaNum);
+            _context.Transactions.RemoveRange(transactions);
+
+            // Supprimer la réservation elle-même
             _context.Reservations.Remove(entity);
             await _context.SaveChangesAsync();
         }

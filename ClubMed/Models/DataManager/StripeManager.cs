@@ -16,7 +16,7 @@ namespace ClubMed.Models.DataManager
                     {
                         PriceData = new SessionLineItemPriceDataOptions
                         {
-                            UnitAmountDecimal = totalAmount * 100, // Stripe veut le montant en centimes
+                            UnitAmount = (long)System.Math.Round(totalAmount * 100), // Stripe veut le montant en centimes (long)
                             Currency = "eur",
                             ProductData = new SessionLineItemPriceDataProductDataOptions
                             {

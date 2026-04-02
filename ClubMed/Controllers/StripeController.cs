@@ -17,8 +17,6 @@ namespace ClubMed.Controllers
         {
             _configuration = configuration;
             _stripeManager = stripeManager;
-            // On récupère la clé via la config pour éviter que Github ne bloque le push
-            StripeConfiguration.ApiKey = _configuration["Stripe:SecretKey"]; 
         }
 
         public class CheckoutSessionRequest
@@ -37,6 +35,7 @@ namespace ClubMed.Controllers
             }
             catch (System.Exception ex)
             {
+                Console.WriteLine($"❌ Stripe Error: {ex.Message}");
                 return BadRequest(new { error = ex.Message });
             }
         }

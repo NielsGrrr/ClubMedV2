@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ClubMed.Models.EntityFramework
 {
     [Table("t_e_station_sta")]
     public class Station
     {
-
         [Key]
         [Column("sta_id")]
         public int IdStation { get; set; }
@@ -35,6 +35,9 @@ namespace ClubMed.Models.EntityFramework
         [Required]
         [Column("sta_infoski", TypeName = "text")]
         public string InfoSki { get; set; } = null!;
+
+        [JsonIgnore]
+        public virtual Photo? Photo { get; set; }
 
         public virtual ICollection<ClubStation> ClubStations { get; set; } = new List<ClubStation>();
     }
