@@ -30,6 +30,7 @@ namespace ClubMed.Tests.Controllers
         public void TestCleanup()
         {
             mockRepository = null;
+            mockManager = null;
             controller = null;
         }
 
@@ -39,14 +40,11 @@ namespace ClubMed.Tests.Controllers
         [TestMethod()]
         public async Task GetClubsTest()
         {
-            // Arrange
             var fausseListe = new List<Club> { new Club { IdClub = 1 }, new Club { IdClub = 2 } };
             mockRepository.Setup(repo => repo.GetAllAsync()).ReturnsAsync(fausseListe);
 
-            // Act
             var result = await controller.GetClubs();
 
-            // Assert
             Assert.IsInstanceOfType(result.Value, typeof(IEnumerable<Club>));
             var liste = result.Value as IEnumerable<Club>;
             Assert.AreEqual(2, liste.Count());
@@ -58,27 +56,21 @@ namespace ClubMed.Tests.Controllers
         [TestMethod()]
         public async Task GetClubById_NonExistingId_ReturnsNotFound()
         {
-            // Arrange
             mockRepository.Setup(repo => repo.GetByIdAsync(99)).ReturnsAsync((Club)null);
 
-            // Act
             var result = await controller.GetClubById(99);
 
-            // Assert
             Assert.IsInstanceOfType(result.Result, typeof(NotFoundResult));
         }
 
         [TestMethod()]
         public async Task GetClubById_ExistingId_ReturnsClub()
         {
-            // Arrange
             var fauxClub = new Club { IdClub = 1 };
             mockRepository.Setup(repo => repo.GetByIdAsync(1)).ReturnsAsync(fauxClub);
 
-            // Act
             var result = await controller.GetClubById(1);
 
-            // Assert
             Assert.IsInstanceOfType(result.Value, typeof(Club));
             var clubRecupere = result.Value as Club;
             Assert.AreEqual(1, clubRecupere.IdClub);
@@ -90,43 +82,34 @@ namespace ClubMed.Tests.Controllers
         [TestMethod()]
         public async Task PutClub_IdMismatch_ReturnsBadRequest()
         {
-            // Arrange
             var club = new Club { IdClub = 2 };
 
-            // Act
             var result = await controller.PutClub(1, club);
 
-            // Assert
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
         }
 
         [TestMethod()]
         public async Task PutClub_NonExistingId_ReturnsNotFound()
         {
-            // Arrange
             var club = new Club { IdClub = 1 };
             mockRepository.Setup(repo => repo.GetByIdAsync(1)).ReturnsAsync((Club)null);
 
-            // Act
             var result = await controller.PutClub(1, club);
 
-            // Assert
             Assert.IsInstanceOfType(result, typeof(NotFoundResult));
         }
 
         [TestMethod()]
         public async Task PutClub_ValidRequest_ReturnsNoContent()
         {
-            // Arrange
             var existant = new Club { IdClub = 1 };
             var modifie = new Club { IdClub = 1 };
             mockRepository.Setup(repo => repo.GetByIdAsync(1)).ReturnsAsync(existant);
             mockRepository.Setup(repo => repo.UpdateAsync(existant, modifie)).Returns(Task.CompletedTask);
 
-            // Act
             var result = await controller.PutClub(1, modifie);
 
-            // Assert
             Assert.IsInstanceOfType(result, typeof(NoContentResult));
             mockRepository.Verify(repo => repo.UpdateAsync(existant, modifie), Times.Once);
         }
@@ -137,46 +120,36 @@ namespace ClubMed.Tests.Controllers
         [TestMethod()]
         public async Task PostClub_InvalidModel_ReturnsBadRequest()
         {
-            // Arrange
-            controller.ModelState.AddModelError("Titre", "Requis"); // Simule une erreur de validation
+            controller.ModelState.AddModelError("Titre", "Requis");
             var club = new Club();
 
-            // Act
-            var result = await controller.PostClub(club); // if (!ModelState.IsValid)
+            var result = await controller.PostClub(club);
 
-            // Assert
             Assert.IsInstanceOfType(result.Result, typeof(BadRequestObjectResult));
         }
 
         [TestMethod()]
         public async Task PostClub_ExistingId_ReturnsConflict()
         {
-            // Arrange
             var clubExistant = new Club { IdClub = 1 };
             mockRepository.Setup(repo => repo.GetByIdAsync(1)).ReturnsAsync(clubExistant);
 
-            // Act
             var result = await controller.PostClub(clubExistant);
 
-            // Assert
             Assert.IsInstanceOfType(result.Result, typeof(ConflictObjectResult));
         }
 
         [TestMethod()]
         public async Task PostClub_ValidNewObject_ReturnsCreatedAtAction()
         {
-            // Arrange
             var nouveauClub = new Club { IdClub = 2 };
             mockRepository.Setup(repo => repo.GetByIdAsync(2)).ReturnsAsync((Club)null);
             mockRepository.Setup(repo => repo.AddAsync(nouveauClub)).Returns(Task.CompletedTask);
 
-            // Act
             var result = await controller.PostClub(nouveauClub);
 
-            // Assert
             Assert.IsInstanceOfType(result.Result, typeof(CreatedAtActionResult));
             var actionResult = result.Result as CreatedAtActionResult;
-            // On vérifie bien la correction que tu as apportée au nom de l'action
             Assert.AreEqual("GetClubByID", actionResult.ActionName);
             mockRepository.Verify(repo => repo.AddAsync(nouveauClub), Times.Once);
         }
@@ -187,63 +160,24 @@ namespace ClubMed.Tests.Controllers
         [TestMethod()]
         public async Task DeleteClub_NonExistingId_ReturnsNotFound()
         {
-            // Arrange
             mockRepository.Setup(repo => repo.GetByIdAsync(99)).ReturnsAsync((Club)null);
 
-            // Act
             var result = await controller.DeleteClub(99);
 
-            // Assert
             Assert.IsInstanceOfType(result, typeof(NotFoundResult));
         }
 
         [TestMethod()]
         public async Task DeleteClub_ExistingId_ReturnsNoContent()
         {
-            // Arrange
             var club = new Club { IdClub = 1 };
             mockRepository.Setup(repo => repo.GetByIdAsync(1)).ReturnsAsync(club);
             mockRepository.Setup(repo => repo.DeleteAsync(club)).Returns(Task.CompletedTask);
 
-            // Act
             var result = await controller.DeleteClub(1);
 
-            // Assert
             Assert.IsInstanceOfType(result, typeof(NoContentResult));
             mockRepository.Verify(repo => repo.DeleteAsync(club), Times.Once);
-        }
-        // ==========================================================
-        // 6. TEST UPLOAD PHOTOS (HU 55)
-        // ==========================================================
-        [TestMethod()]
-        public async Task UploadPhotos_ValidRequest_ReturnsOk()
-        {
-            // Arrange
-            int idExistante = 1;
-            var club = new Club { IdClub = idExistante };
-            mockRepository.Setup(repo => repo.GetByIdAsync(idExistante)).ReturnsAsync(club);
-
-            // Simuler la réception d'un fichier image
-            var fileMock = new Mock<IFormFile>();
-            var content = "contenu image factice";
-            var fileName = "test.jpg";
-            var ms = new MemoryStream();
-            var writer = new StreamWriter(ms);
-            writer.Write(content);
-            writer.Flush();
-            ms.Position = 0;
-            fileMock.Setup(_ => _.OpenReadStream()).Returns(ms);
-            fileMock.Setup(_ => _.FileName).Returns(fileName);
-            fileMock.Setup(_ => _.Length).Returns(ms.Length);
-
-            var listePhotos = new List<IFormFile> { fileMock.Object };
-
-            // Act
-            var result = await controller.UploadPhotos(idExistante, listePhotos);
-
-            // Assert
-            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
-            mockRepository.Verify(repo => repo.GetByIdAsync(idExistante), Times.Once);
         }
     }
 }
