@@ -39,13 +39,13 @@ namespace ClubMed.Models.EntityFramework
         public string? SousReservationType { get; set; }
 
         [JsonIgnore]
-        public virtual Reservation Reservation { get; set; } = null!;
+        public virtual Reservation? Reservation { get; set; } = null!;
 
         [JsonIgnore]
-        public virtual Client Client { get; set; } = null!;
+        public virtual Client? Client { get; set; } = null!;
 
         [JsonIgnore]
-        public virtual Transport Transport { get; set; } = null!;
+        public virtual Transport? Transport { get; set; } = null!;
 
         public virtual ICollection<SousReservationActivite> SousReservationActivites { get; set; } = new List<SousReservationActivite>();
     }
