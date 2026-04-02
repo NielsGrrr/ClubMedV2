@@ -53,6 +53,8 @@ namespace ClubMed.Migrations
                     b.HasKey("ActiviteId")
                         .HasName("pk_activite");
 
+                    b.HasIndex("PartenaireId");
+
                     b.ToTable("t_e_activite_act", (string)null);
                 });
 
@@ -181,6 +183,8 @@ namespace ClubMed.Migrations
 
                     b.HasKey("ResaNum", "ActiId")
                         .HasName("pk_activitereservation");
+
+                    b.HasIndex("ActiId");
 
                     b.ToTable("t_j_activitereservation_rea", (string)null);
                 });
@@ -315,6 +319,8 @@ namespace ClubMed.Migrations
                     b.HasIndex("IdClub");
 
                     b.HasIndex("NumClient");
+
+                    b.HasIndex("NumReservation");
 
                     b.ToTable("t_j_avis_avi", (string)null);
                 });
@@ -558,6 +564,8 @@ namespace ClubMed.Migrations
 
                     b.HasIndex("NumPays");
 
+                    b.HasIndex("NumPhoto");
+
                     b.ToTable("t_e_club_clu", (string)null);
                 });
 
@@ -573,6 +581,8 @@ namespace ClubMed.Migrations
 
                     b.HasKey("ClubId", "ActiviteId")
                         .HasName("pk_clubactivite");
+
+                    b.HasIndex("ActiviteId");
 
                     b.ToTable("t_j_clubactivite_cla", (string)null);
                 });
@@ -717,6 +727,10 @@ namespace ClubMed.Migrations
                     b.HasKey("DispoDate", "DispoNumChambre", "ClubId")
                         .HasName("pk_disponibilite");
 
+                    b.HasIndex("ClubId");
+
+                    b.HasIndex("DispoNumChambre");
+
                     b.ToTable("t_e_disponibilite_dis", (string)null);
                 });
 
@@ -837,6 +851,8 @@ namespace ClubMed.Migrations
 
                     b.HasKey("NumRestauration")
                         .HasName("PK_lre_numrestauration");
+
+                    b.HasIndex("NumPhoto");
 
                     b.ToTable("t_e_lieurestauration_lre", (string)null);
                 });
@@ -1135,6 +1151,10 @@ namespace ClubMed.Migrations
                     b.HasKey("ResaNum")
                         .HasName("pk_reservation");
 
+                    b.HasIndex("ClientNum");
+
+                    b.HasIndex("ClubId");
+
                     b.HasIndex("TransportId");
 
                     b.ToTable("t_e_reservation_res", (string)null);
@@ -1181,7 +1201,79 @@ namespace ClubMed.Migrations
                     b.HasKey("NumPays")
                         .HasName("pk_souslocalisation");
 
+                    b.HasIndex("NumPhoto");
+
                     b.ToTable("t_r_souslocalisation_slc", (string)null);
+                });
+
+            modelBuilder.Entity("ClubMed.Models.EntityFramework.SousReservation", b =>
+                {
+                    b.Property<int>("SousReservationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("sre_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SousReservationId"));
+
+                    b.Property<int>("ClientNum")
+                        .HasColumnType("integer")
+                        .HasColumnName("cli_numclient");
+
+                    b.Property<int>("ResaNum")
+                        .HasColumnType("integer")
+                        .HasColumnName("res_numreservation");
+
+                    b.Property<DateTime?>("SousReservationDateNaissance")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("sre_datenaissance");
+
+                    b.Property<string>("SousReservationNom")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("sre_nom");
+
+                    b.Property<string>("SousReservationPrenom")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("sre_prenom");
+
+                    b.Property<string>("SousReservationType")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("sre_type");
+
+                    b.Property<int>("TransportId")
+                        .HasColumnType("integer")
+                        .HasColumnName("tra_idtransport");
+
+                    b.HasKey("SousReservationId")
+                        .HasName("pk_sousreservation");
+
+                    b.HasIndex("ClientNum");
+
+                    b.HasIndex("ResaNum");
+
+                    b.HasIndex("TransportId");
+
+                    b.ToTable("t_e_sousreservation_sre", (string)null);
+                });
+
+            modelBuilder.Entity("ClubMed.Models.EntityFramework.SousReservationActivite", b =>
+                {
+                    b.Property<int>("SousReservationId")
+                        .HasColumnType("integer")
+                        .HasColumnName("sre_id");
+
+                    b.Property<int>("ActiviteId")
+                        .HasColumnType("integer")
+                        .HasColumnName("act_id");
+
+                    b.HasKey("SousReservationId", "ActiviteId")
+                        .HasName("pk_sousreservationactivite");
+
+                    b.HasIndex("ActiviteId");
+
+                    b.ToTable("t_j_sousreservationactivite_sra", (string)null);
                 });
 
             modelBuilder.Entity("ClubMed.Models.EntityFramework.Station", b =>
@@ -1222,6 +1314,8 @@ namespace ClubMed.Migrations
 
                     b.HasKey("IdStation")
                         .HasName("pk_station");
+
+                    b.HasIndex("NumPhoto");
 
                     b.ToTable("t_e_station_sta", (string)null);
                 });
@@ -1357,6 +1451,8 @@ namespace ClubMed.Migrations
 
                     b.HasKey("TypeActiviteNum")
                         .HasName("pk_typeactivite");
+
+                    b.HasIndex("TypeActiviteNumPhoto");
 
                     b.ToTable("t_e_typeactivite_tya", (string)null);
                 });
@@ -1504,6 +1600,16 @@ namespace ClubMed.Migrations
                     b.ToTable("t_e_typeclub_tcl", (string)null);
                 });
 
+            modelBuilder.Entity("ClubMed.Models.EntityFramework.Activite", b =>
+                {
+                    b.HasOne("ClubMed.Models.EntityFramework.Partenaire", "Partenaire")
+                        .WithMany()
+                        .HasForeignKey("PartenaireId")
+                        .HasConstraintName("fk_activite_partenaire");
+
+                    b.Navigation("Partenaire");
+                });
+
             modelBuilder.Entity("ClubMed.Models.EntityFramework.ActiviteAdulte", b =>
                 {
                     b.HasOne("ClubMed.Models.EntityFramework.TypeActivite", "TypeActivite")
@@ -1530,12 +1636,21 @@ namespace ClubMed.Migrations
 
             modelBuilder.Entity("ClubMed.Models.EntityFramework.ActiviteReservation", b =>
                 {
+                    b.HasOne("ClubMed.Models.EntityFramework.Activite", "Activite")
+                        .WithMany()
+                        .HasForeignKey("ActiId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_activitereservation_activite");
+
                     b.HasOne("ClubMed.Models.EntityFramework.Reservation", "Reservation")
                         .WithMany("ActivitesReservations")
                         .HasForeignKey("ResaNum")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_activitereservation_reservation");
+
+                    b.Navigation("Activite");
 
                     b.Navigation("Reservation");
                 });
@@ -1568,9 +1683,18 @@ namespace ClubMed.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_avis_client");
 
+                    b.HasOne("ClubMed.Models.EntityFramework.Reservation", "Reservation")
+                        .WithMany()
+                        .HasForeignKey("NumReservation")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_avis_reservation");
+
                     b.Navigation("Client");
 
                     b.Navigation("Club");
+
+                    b.Navigation("Reservation");
                 });
 
             modelBuilder.Entity("ClubMed.Models.EntityFramework.CategorieLocalisation", b =>
@@ -1645,7 +1769,37 @@ namespace ClubMed.Migrations
                         .HasForeignKey("NumPays")
                         .HasConstraintName("fk_club_souslocalisation");
 
+                    b.HasOne("ClubMed.Models.EntityFramework.Photo", "Photo")
+                        .WithMany()
+                        .HasForeignKey("NumPhoto")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_club_photo");
+
+                    b.Navigation("Photo");
+
                     b.Navigation("SousLocalisation");
+                });
+
+            modelBuilder.Entity("ClubMed.Models.EntityFramework.ClubActivite", b =>
+                {
+                    b.HasOne("ClubMed.Models.EntityFramework.Activite", "Activite")
+                        .WithMany()
+                        .HasForeignKey("ActiviteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_clubactivite_activite");
+
+                    b.HasOne("ClubMed.Models.EntityFramework.Club", "Club")
+                        .WithMany("ClubActivites")
+                        .HasForeignKey("ClubId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_clubactivite_club");
+
+                    b.Navigation("Activite");
+
+                    b.Navigation("Club");
                 });
 
             modelBuilder.Entity("ClubMed.Models.EntityFramework.ClubCategorie", b =>
@@ -1753,6 +1907,13 @@ namespace ClubMed.Migrations
 
             modelBuilder.Entity("ClubMed.Models.EntityFramework.Disponibilite", b =>
                 {
+                    b.HasOne("ClubMed.Models.EntityFramework.Club", "Club")
+                        .WithMany()
+                        .HasForeignKey("ClubId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_disponibilite_club");
+
                     b.HasOne("ClubMed.Models.EntityFramework.Calendrier", "Calendrier")
                         .WithMany("Disponibilites")
                         .HasForeignKey("DispoDate")
@@ -1760,7 +1921,18 @@ namespace ClubMed.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_disponibilite_calendrier");
 
+                    b.HasOne("ClubMed.Models.EntityFramework.Chambre", "Chambre")
+                        .WithMany()
+                        .HasForeignKey("DispoNumChambre")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_disponibilite_chambre");
+
                     b.Navigation("Calendrier");
+
+                    b.Navigation("Chambre");
+
+                    b.Navigation("Club");
                 });
 
             modelBuilder.Entity("ClubMed.Models.EntityFramework.Equipement", b =>
@@ -1803,6 +1975,18 @@ namespace ClubMed.Migrations
                     b.Navigation("PointFortNav");
 
                     b.Navigation("ServiceNav");
+                });
+
+            modelBuilder.Entity("ClubMed.Models.EntityFramework.LieuRestauration", b =>
+                {
+                    b.HasOne("ClubMed.Models.EntityFramework.Photo", "Photo")
+                        .WithMany()
+                        .HasForeignKey("NumPhoto")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_lieurestauration_photo");
+
+                    b.Navigation("Photo");
                 });
 
             modelBuilder.Entity("ClubMed.Models.EntityFramework.PaysRegion", b =>
@@ -1887,6 +2071,20 @@ namespace ClubMed.Migrations
 
             modelBuilder.Entity("ClubMed.Models.EntityFramework.Reservation", b =>
                 {
+                    b.HasOne("ClubMed.Models.EntityFramework.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientNum")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_reservation_client");
+
+                    b.HasOne("ClubMed.Models.EntityFramework.Club", "Club")
+                        .WithMany()
+                        .HasForeignKey("ClubId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_reservation_club");
+
                     b.HasOne("ClubMed.Models.EntityFramework.Transport", "Transport")
                         .WithMany("Reservations")
                         .HasForeignKey("TransportId")
@@ -1894,7 +2092,86 @@ namespace ClubMed.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_reservation_transport");
 
+                    b.Navigation("Client");
+
+                    b.Navigation("Club");
+
                     b.Navigation("Transport");
+                });
+
+            modelBuilder.Entity("ClubMed.Models.EntityFramework.SousLocalisation", b =>
+                {
+                    b.HasOne("ClubMed.Models.EntityFramework.Photo", "Photo")
+                        .WithMany()
+                        .HasForeignKey("NumPhoto")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_souslocalisation_photo");
+
+                    b.Navigation("Photo");
+                });
+
+            modelBuilder.Entity("ClubMed.Models.EntityFramework.SousReservation", b =>
+                {
+                    b.HasOne("ClubMed.Models.EntityFramework.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientNum")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_sousresa_client");
+
+                    b.HasOne("ClubMed.Models.EntityFramework.Reservation", "Reservation")
+                        .WithMany("SousReservations")
+                        .HasForeignKey("ResaNum")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_sousresa_reservation");
+
+                    b.HasOne("ClubMed.Models.EntityFramework.Transport", "Transport")
+                        .WithMany()
+                        .HasForeignKey("TransportId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_sousresa_transport");
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Reservation");
+
+                    b.Navigation("Transport");
+                });
+
+            modelBuilder.Entity("ClubMed.Models.EntityFramework.SousReservationActivite", b =>
+                {
+                    b.HasOne("ClubMed.Models.EntityFramework.Activite", "Activite")
+                        .WithMany()
+                        .HasForeignKey("ActiviteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_sra_activite");
+
+                    b.HasOne("ClubMed.Models.EntityFramework.SousReservation", "SousReservation")
+                        .WithMany("SousReservationActivites")
+                        .HasForeignKey("SousReservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_sra_sousresa");
+
+                    b.Navigation("Activite");
+
+                    b.Navigation("SousReservation");
+                });
+
+            modelBuilder.Entity("ClubMed.Models.EntityFramework.Station", b =>
+                {
+                    b.HasOne("ClubMed.Models.EntityFramework.Photo", "Photo")
+                        .WithMany()
+                        .HasForeignKey("NumPhoto")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_station_photo");
+
+                    b.Navigation("Photo");
                 });
 
             modelBuilder.Entity("ClubMed.Models.EntityFramework.Transaction", b =>
@@ -1907,6 +2184,18 @@ namespace ClubMed.Migrations
                         .HasConstraintName("fk_transaction_reservation");
 
                     b.Navigation("Reservation");
+                });
+
+            modelBuilder.Entity("ClubMed.Models.EntityFramework.TypeActivite", b =>
+                {
+                    b.HasOne("ClubMed.Models.EntityFramework.Photo", "Photo")
+                        .WithMany()
+                        .HasForeignKey("TypeActiviteNumPhoto")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_typeactivite_photo");
+
+                    b.Navigation("Photo");
                 });
 
             modelBuilder.Entity("ClubMed.Models.EntityFramework.TypeChambre", b =>
@@ -2052,6 +2341,8 @@ namespace ClubMed.Migrations
                 {
                     b.Navigation("Avis");
 
+                    b.Navigation("ClubActivites");
+
                     b.Navigation("ClubCategories");
 
                     b.Navigation("ClubChambres");
@@ -2128,6 +2419,8 @@ namespace ClubMed.Migrations
 
                     b.Navigation("AutresVoyageurs");
 
+                    b.Navigation("SousReservations");
+
                     b.Navigation("Transactions");
                 });
 
@@ -2143,6 +2436,11 @@ namespace ClubMed.Migrations
                     b.Navigation("Clubs");
 
                     b.Navigation("PaysRegions");
+                });
+
+            modelBuilder.Entity("ClubMed.Models.EntityFramework.SousReservation", b =>
+                {
+                    b.Navigation("SousReservationActivites");
                 });
 
             modelBuilder.Entity("ClubMed.Models.EntityFramework.Station", b =>

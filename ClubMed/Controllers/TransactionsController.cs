@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,10 +27,8 @@ namespace ClubMed.Controllers
             return transactions.ToList();
         }
 
-        // GET: api/Transactions/GetById/5
-        [HttpGet]
-        [Route("[action]/{id}")]
-        [ActionName("GetById")]
+        // GET: api/Transactions/5
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Transaction>> GetById(int id)

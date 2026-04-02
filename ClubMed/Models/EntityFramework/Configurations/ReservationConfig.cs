@@ -75,6 +75,16 @@ namespace ClubMed.Models.EntityFramework.Configurations
                    .HasForeignKey(r => r.TransportId)
                    .OnDelete(DeleteBehavior.Cascade)
                    .HasConstraintName("fk_reservation_transport");
+
+            builder.HasOne(r => r.Client)
+                   .WithMany()
+                   .HasForeignKey(r => r.ClientNum)
+                   .HasConstraintName("fk_reservation_client");
+
+            builder.HasOne(r => r.Club)
+                   .WithMany()
+                   .HasForeignKey(r => r.ClubId)
+                   .HasConstraintName("fk_reservation_club");
         }
     }
 }

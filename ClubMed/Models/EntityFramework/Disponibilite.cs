@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ClubMed.Models.EntityFramework
 {
@@ -20,6 +21,9 @@ namespace ClubMed.Models.EntityFramework
 
         [Column("dis_estdisponibilite")]
         public bool? IsDisponible { get; set; }
+
+        [JsonIgnore] public virtual Chambre? Chambre { get; set; }
+        [JsonIgnore] public virtual Club? Club { get; set; }
 
         public virtual Calendrier Calendrier { get; set; } = null!;
     }

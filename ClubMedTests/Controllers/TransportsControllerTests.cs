@@ -7,7 +7,7 @@ using ClubMed.Models.Repository;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ClubMed.Controllers.Tests
+namespace ClubMed.Tests.Controllers
 {
     [TestClass()]
     public class TransportsControllerTests

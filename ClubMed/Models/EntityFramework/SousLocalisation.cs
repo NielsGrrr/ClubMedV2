@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClubMed.Models.EntityFramework
@@ -17,6 +18,9 @@ namespace ClubMed.Models.EntityFramework
         [Column("slc_nompays")]
         [StringLength(1024)]
         public string? NomPays { get; set; }
+
+        [JsonIgnore]
+        public virtual Photo? Photo { get; set; }
 
         public virtual ICollection<PaysRegion> PaysRegions { get; set; } = new List<PaysRegion>();
 

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ClubMed.Models.EntityFramework
 {
@@ -40,6 +41,9 @@ namespace ClubMed.Models.EntityFramework
         [StringLength(50)]
         public string? StatutMiseEnLigne { get; set; } = "EN_CREATION";
 
+        [JsonIgnore]
+        public virtual Photo? Photo { get; set; }
+
         public virtual SousLocalisation SousLocalisation { get; set; } = null!;
 
         public virtual ICollection<Avis> Avis { get; set; } = new List<Avis>();
@@ -57,5 +61,7 @@ namespace ClubMed.Models.EntityFramework
         public virtual ICollection<TypeChambre> TypeChambres { get; set; } = new List<TypeChambre>();
 
         public virtual ICollection<ClubRegroupement> ClubRegroupements { get; set; } = new List<ClubRegroupement>();
+
+        public virtual ICollection<ClubActivite> ClubActivites { get; set; } = new List<ClubActivite>();
     }
 }

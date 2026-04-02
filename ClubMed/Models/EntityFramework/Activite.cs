@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ClubMed.Models.EntityFramework
 {
@@ -26,5 +27,7 @@ namespace ClubMed.Models.EntityFramework
 
         [Column("act_idpartenaire")]
         public int? PartenaireId { get; set; }
+
+        [JsonIgnore] public virtual Partenaire? Partenaire { get; set; }
     }
 }

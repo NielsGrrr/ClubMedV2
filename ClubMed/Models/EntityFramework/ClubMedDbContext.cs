@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClubMed.Models.EntityFramework
 {
@@ -20,6 +20,8 @@ namespace ClubMed.Models.EntityFramework
         public virtual DbSet<AutreVoyageur> AutresVoyageurs { get; set; } = null!;
         public virtual DbSet<Transaction> Transactions { get; set; } = null!;
         public virtual DbSet<Transport> Transports { get; set; } = null!;
+        public virtual DbSet<SousReservation> SousReservations { get; set; } = null!;
+        public virtual DbSet<SousReservationActivite> SousReservationActivites { get; set; } = null!;
 
         // --- Clubs & Hébergement ---
         public virtual DbSet<Club> Clubs { get; set; } = null!;

@@ -32,6 +32,16 @@ namespace ClubMed.Models.EntityFramework.Configurations
                    .HasForeignKey(d => d.DispoDate)
                    .OnDelete(DeleteBehavior.Cascade)
                    .HasConstraintName("fk_disponibilite_calendrier");
+
+            builder.HasOne(d => d.Chambre)
+                   .WithMany()
+                   .HasForeignKey(d => d.DispoNumChambre)
+                   .HasConstraintName("fk_disponibilite_chambre");
+
+            builder.HasOne(d => d.Club)
+                   .WithMany()
+                   .HasForeignKey(d => d.ClubId)
+                   .HasConstraintName("fk_disponibilite_club");
         }
     }
 }

@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using ClubMed.Models.EntityFramework;
 using ClubMed.Models.Repository;
+using BCrypt.Net;
 
 namespace ClubMed.Controllers
 {
@@ -99,9 +102,32 @@ namespace ClubMed.Controllers
                 return BadRequest(ModelState);
             }
 
-            await dataRepository.AddAsync(client);
+            // Uniformiser l'email en minuscules pour l'unicité
+            if (!string.IsNullOrEmpty(client.Email))
+            {
+                client.Email = client.Email.ToLowerInvariant();
+            }
 
-            return CreatedAtAction("GetById", new { id = client.NumClient }, client);
+            // Cryptage du mot de passe avec BCrypt
+            if (!string.IsNullOrEmpty(client.MotDePasseCrypter))
+            {
+                client.MotDePasseCrypter = BCrypt.Net.BCrypt.HashPassword(client.MotDePasseCrypter);
+            }
+
+            try
+            {
+                await dataRepository.AddAsync(client);
+                return CreatedAtAction("GetById", new { id = client.NumClient }, client);
+            }
+            catch (DbUpdateException ex)
+            {
+                // Vérification de la contrainte unique sur l'email
+                if (ex.InnerException is PostgresException pgEx && pgEx.SqlState == "23505")
+                {
+                    return Conflict(new { message = "L'adresse email saisie est déjà associée à un compte existant." });
+                }
+                throw; // Rethrow pour les autres erreurs
+            }
         }
 
         // DELETE: api/Clients/5

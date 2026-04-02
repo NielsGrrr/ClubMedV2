@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ClubMed.Models.EntityFramework
 {
@@ -26,6 +27,8 @@ namespace ClubMed.Models.EntityFramework
 
         [Column("rea_dateenvoi")]
         public DateTime? ResaDateEnvoi { get; set; }
+
+        [JsonIgnore] public virtual Activite? Activite { get; set; }
 
         public virtual Reservation Reservation { get; set; } = null!;
     }

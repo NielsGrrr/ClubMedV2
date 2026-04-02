@@ -51,6 +51,11 @@ namespace ClubMed.Models.EntityFramework.Configurations
                 .WithMany(p => p.Clubs)
                 .HasForeignKey(c => c.NumPays)
                 .HasConstraintName("fk_club_souslocalisation");
+
+            builder.HasOne(c => c.Photo)
+                   .WithMany()
+                   .HasForeignKey(c => c.NumPhoto)
+                   .HasConstraintName("fk_club_photo");
         }
     }
 }
