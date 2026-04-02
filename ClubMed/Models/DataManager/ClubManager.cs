@@ -1,4 +1,4 @@
-﻿using ClubMed.Models.EntityFramework;
+using ClubMed.Models.EntityFramework;
 using ClubMed.Models.Repository;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +11,11 @@ namespace ClubMed.Models.DataManager
         public ClubManager(ClubMedDbContext context)
         {
             clubMedDbContext = context;
+        }
+
+        public ClubMedDbContext GetContext()
+        {
+            return clubMedDbContext!;
         }
 
         public async Task AddAsync(Club entity)

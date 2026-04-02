@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO; // <-- AJOUTÉ ICI
 using System.Collections.Generic;
 using System.Linq;
@@ -121,7 +121,7 @@ namespace ClubMed.Controllers
             return CreatedAtAction("GetClubByID", new { id = club.IdClub }, club);
         }
 
-        // POST: api/Clubs/5/photos (HU 55 - Upload d'images) <-- AJOUTÉ ICI
+        // POST: api/Clubs/5/photos (HU 55 - Upload d'images sécurisé sans migration)
         [HttpPost("{id}/photos")]
         public async Task<IActionResult> UploadPhotos(int id, [FromForm] List<IFormFile> photos)
         {
@@ -133,17 +133,34 @@ namespace ClubMed.Controllers
             var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "ressort");
             if (!Directory.Exists(uploadPath)) Directory.CreateDirectory(uploadPath);
 
-            foreach (var photo in photos)
-            {
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(photo.FileName);
-                var filePath = Path.Combine(uploadPath, fileName);
+            // On ne prend que la 1ère photo pour la lier comme "Main Photo" du Club (NumPhoto)
+            var mainPhoto = photos.First();
 
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await photo.CopyToAsync(stream);
-                }
+            // Création safe de la Photo en BDD sans modifier le schéma
+            var context = ((ClubManager)dataRepository).GetContext(); // Nécessite un getter ou cast
+            
+            // On peut insérer la photo via DbContext
+            var newPhoto = new Photo { Url = "placeholder" };
+            context.Photos.Add(newPhoto);
+            await context.SaveChangesAsync();
+
+            // On a maintenant le vrai ID (NumPhoto)
+            var fileName = $"{newPhoto.NumPhoto}.webp";
+            newPhoto.Url = fileName;
+            
+            // On stocke sur disque
+            var filePath = Path.Combine(uploadPath, fileName);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await mainPhoto.CopyToAsync(stream);
             }
-            return Ok(new { message = $"{photos.Count} photo(s) enregistrée(s) avec succès !" });
+
+            // On relie le Club à cette image !
+            club.NumPhoto = newPhoto.NumPhoto;
+            context.Clubs.Update(club);
+            await context.SaveChangesAsync();
+
+            return Ok(new { message = $"Photo enregistrée et liée au club avec succès !" });
         }
 
         // DELETE: api/Clubs/5
