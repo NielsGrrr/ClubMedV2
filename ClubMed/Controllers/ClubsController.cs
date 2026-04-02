@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO; // <-- AJOUTÉ ICI
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -114,6 +115,31 @@ namespace ClubMed.Controllers
             await dataRepository.AddAsync(club);
 
             return CreatedAtAction("GetClubByID", new { id = club.IdClub }, club);
+        }
+
+        // POST: api/Clubs/5/photos (HU 55 - Upload d'images) <-- AJOUTÉ ICI
+        [HttpPost("{id}/photos")]
+        public async Task<IActionResult> UploadPhotos(int id, [FromForm] List<IFormFile> photos)
+        {
+            var club = await dataRepository.GetByIdAsync(id);
+            if (club == null) return NotFound("Le club n'existe pas.");
+
+            if (photos == null || photos.Count == 0) return BadRequest("Aucune photo reçue.");
+
+            var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "ressort");
+            if (!Directory.Exists(uploadPath)) Directory.CreateDirectory(uploadPath);
+
+            foreach (var photo in photos)
+            {
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(photo.FileName);
+                var filePath = Path.Combine(uploadPath, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await photo.CopyToAsync(stream);
+                }
+            }
+            return Ok(new { message = $"{photos.Count} photo(s) enregistrée(s) avec succès !" });
         }
 
         // DELETE: api/Clubs/5
