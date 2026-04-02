@@ -59,6 +59,16 @@ namespace ClubMed.Models.DataManager
                 .Where(t => t.ResaNum == entity.ResaNum);
             _context.Transactions.RemoveRange(transactions);
 
+            // Cascade pour les SousReservations et leurs Activites
+            var sousResas = _context.SousReservations
+                .Include(sr => sr.SousReservationActivites)
+                .Where(sr => sr.ResaNum == entity.ResaNum);
+            
+            foreach(var sr in sousResas) {
+                if (sr.SousReservationActivites != null) _context.SousReservationActivites.RemoveRange(sr.SousReservationActivites);
+            }
+            _context.SousReservations.RemoveRange(sousResas);
+
             // Supprimer la réservation elle-même
             _context.Reservations.Remove(entity);
             await _context.SaveChangesAsync();
