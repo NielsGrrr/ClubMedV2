@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ClubMed.Models.EntityFramework.Configurations
@@ -13,8 +13,12 @@ namespace ClubMed.Models.EntityFramework.Configurations
             builder.Property(sr => sr.ResaNum).IsRequired().HasColumnName("res_numreservation");
             builder.Property(sr => sr.ClientNum).IsRequired().HasColumnName("cli_numclient");
             builder.Property(sr => sr.TransportId).IsRequired().HasColumnName("tra_idtransport");
+            builder.Property(sr => sr.SousReservationNom).HasColumnName("sre_nom");
+            builder.Property(sr => sr.SousReservationPrenom).HasColumnName("sre_prenom");
+            builder.Property(sr => sr.SousReservationDateNaissance).HasColumnName("sre_datenaissance");
+            builder.Property(sr => sr.SousReservationType).HasColumnName("sre_type");
 
-            builder.HasOne(sr => sr.Reservation).WithMany().HasForeignKey(sr => sr.ResaNum).HasConstraintName("fk_sousresa_reservation");
+            builder.HasOne(sr => sr.Reservation).WithMany(r => r.SousReservations).HasForeignKey(sr => sr.ResaNum).HasConstraintName("fk_sousresa_reservation");
             builder.HasOne(sr => sr.Client).WithMany().HasForeignKey(sr => sr.ClientNum).HasConstraintName("fk_sousresa_client");
             builder.HasOne(sr => sr.Transport).WithMany().HasForeignKey(sr => sr.TransportId).HasConstraintName("fk_sousresa_transport");
         }

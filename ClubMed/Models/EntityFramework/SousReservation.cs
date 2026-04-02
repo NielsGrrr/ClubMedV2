@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -22,6 +22,21 @@ namespace ClubMed.Models.EntityFramework
         [Required]
         [Column("tra_idtransport")]
         public int TransportId { get; set; }
+
+        [Column("sre_nom")]
+        [StringLength(100)]
+        public string? SousReservationNom { get; set; }
+
+        [Column("sre_prenom")]
+        [StringLength(100)]
+        public string? SousReservationPrenom { get; set; }
+
+        [Column("sre_datenaissance")]
+        public DateTime? SousReservationDateNaissance { get; set; }
+
+        [Column("sre_type")]
+        [StringLength(20)]
+        public string? SousReservationType { get; set; }
 
         [JsonIgnore]
         public virtual Reservation Reservation { get; set; } = null!;

@@ -21,7 +21,10 @@ namespace ClubMed.Models.DataManager
         
         public async Task<Reservation?> GetByIdAsync(int id)
         {
-            return await _context.Reservations.FindAsync(id);
+            return await _context.Reservations
+                .Include(r => r.SousReservations)
+                    .ThenInclude(sr => sr.SousReservationActivites)
+                .FirstOrDefaultAsync(r => r.ResaNum == id);
         }
 
         public Task<Reservation?> GetByStringAsync(string str)

@@ -102,10 +102,28 @@ namespace ClubMed
             builder.Services.AddScoped<IDataRepository<ClubMed.Models.EntityFramework.Service>, ServiceManager>();
             builder.Services.AddScoped<IDataRepository<Photo>, PhotoManager>();
             builder.Services.AddScoped<IDataRepository<Periode>, PeriodeManager>();
+            builder.Services.AddScoped<IDataRepository<SousReservation>, SousReservationsManager>();
+            builder.Services.AddScoped<IDataRepository<SousReservationActivite>, SousReservationActivitesManager>();
             
 
 
             var app = builder.Build();
+            
+            // Appliquer les migrations automatiquement (Pratique pour Azure)
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                try
+                {
+                    var context = services.GetRequiredService<ClubMedDbContext>();
+                    context.Database.Migrate();
+                    Console.WriteLine("✅ Database Migrations applied successfully.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"❌ Error applying migrations: {ex.Message}");
+                }
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

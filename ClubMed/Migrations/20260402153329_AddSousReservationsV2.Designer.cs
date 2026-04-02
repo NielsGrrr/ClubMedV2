@@ -3,6 +3,7 @@ using System;
 using ClubMed.Models.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ClubMed.Migrations
 {
     [DbContext(typeof(ClubMedDbContext))]
-    partial class ClubMedDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260402153329_AddSousReservationsV2")]
+    partial class AddSousReservationsV2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1222,25 +1225,6 @@ namespace ClubMed.Migrations
                     b.Property<int>("ResaNum")
                         .HasColumnType("integer")
                         .HasColumnName("res_numreservation");
-
-                    b.Property<DateTime?>("SousReservationDateNaissance")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("sre_datenaissance");
-
-                    b.Property<string>("SousReservationNom")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("sre_nom");
-
-                    b.Property<string>("SousReservationPrenom")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("sre_prenom");
-
-                    b.Property<string>("SousReservationType")
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
-                        .HasColumnName("sre_type");
 
                     b.Property<int>("TransportId")
                         .HasColumnType("integer")

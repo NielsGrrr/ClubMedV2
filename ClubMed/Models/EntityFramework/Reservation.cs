@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -42,5 +42,6 @@ namespace ClubMed.Models.EntityFramework
         [JsonIgnore] public virtual ICollection<AutreVoyageur> AutresVoyageurs { get; set; } = new List<AutreVoyageur>();
         [JsonIgnore] public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
         [JsonIgnore] public virtual ICollection<ActiviteReservation> ActivitesReservations { get; set; } = new List<ActiviteReservation>();
+        [JsonIgnore] public virtual ICollection<SousReservation> SousReservations { get; set; } = new List<SousReservation>();
     }
 }
