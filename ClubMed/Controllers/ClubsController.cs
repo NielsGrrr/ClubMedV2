@@ -162,4 +162,5 @@ namespace ClubMed.Controllers
             return _context.Clubs.Any(e => e.IdClub == id);
         }*/
     }
+    //test
 }
