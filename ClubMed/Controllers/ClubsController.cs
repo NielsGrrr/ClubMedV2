@@ -77,22 +77,26 @@ namespace ClubMed.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutClub(int id, Club club)
         {
+            // HACK : On supprime manuellement la validation de la SousLocalisation
+            // Cela permet de passer la validation même si l'objet est absent du JSON
+            ModelState.Remove("SousLocalisation");
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (id != club.IdClub)
             {
                 return BadRequest();
             }
 
             var clubToUpdate = await dataRepository.GetByIdAsync(id);
+            if (clubToUpdate == null) return NotFound();
 
-            if (clubToUpdate == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                await dataRepository.UpdateAsync(clubToUpdate, club);
-                return NoContent();
-            }
+            // On met à jour les champs manuellement ou via le repository
+            await dataRepository.UpdateAsync(clubToUpdate, club);
+            return NoContent();
         }
 
         // POST: api/Clubs
