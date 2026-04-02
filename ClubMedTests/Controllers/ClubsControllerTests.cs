@@ -212,5 +212,38 @@ namespace ClubMed.Tests.Controllers
             Assert.IsInstanceOfType(result, typeof(NoContentResult));
             mockRepository.Verify(repo => repo.DeleteAsync(club), Times.Once);
         }
+        // ==========================================================
+        // 6. TEST UPLOAD PHOTOS (HU 55)
+        // ==========================================================
+        [TestMethod()]
+        public async Task UploadPhotos_ValidRequest_ReturnsOk()
+        {
+            // Arrange
+            int idExistante = 1;
+            var club = new Club { IdClub = idExistante };
+            mockRepository.Setup(repo => repo.GetByIdAsync(idExistante)).ReturnsAsync(club);
+
+            // Simuler la réception d'un fichier image
+            var fileMock = new Mock<IFormFile>();
+            var content = "contenu image factice";
+            var fileName = "test.jpg";
+            var ms = new MemoryStream();
+            var writer = new StreamWriter(ms);
+            writer.Write(content);
+            writer.Flush();
+            ms.Position = 0;
+            fileMock.Setup(_ => _.OpenReadStream()).Returns(ms);
+            fileMock.Setup(_ => _.FileName).Returns(fileName);
+            fileMock.Setup(_ => _.Length).Returns(ms.Length);
+
+            var listePhotos = new List<IFormFile> { fileMock.Object };
+
+            // Act
+            var result = await controller.UploadPhotos(idExistante, listePhotos);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            mockRepository.Verify(repo => repo.GetByIdAsync(idExistante), Times.Once);
+        }
     }
 }
