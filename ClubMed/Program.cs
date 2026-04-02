@@ -115,6 +115,7 @@ namespace ClubMed
                 var services = scope.ServiceProvider;
                 try
                 {
+                    var context = services.GetRequiredService<ClubMedDbContext>();
                     context.Database.Migrate();
                     Console.WriteLine("✅ Database Migrations applied successfully.");
                 }
