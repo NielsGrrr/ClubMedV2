@@ -8,6 +8,8 @@ using Npgsql;
 using ClubMed.Models.EntityFramework;
 using ClubMed.Models.Repository;
 using BCrypt.Net;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace ClubMed.Controllers
 {
@@ -68,14 +70,29 @@ namespace ClubMed.Controllers
 
         // PUT: api/Clients/5
         [HttpPut("{id}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> PutClient(int id, Client client)
         {
             if (id != client.NumClient)
             {
                 return BadRequest();
+            }
+
+            // Vérification des droits : propriétaire ou admin
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userRoleClaim = User.FindFirstValue(ClaimTypes.Role);
+            
+            bool isAdmin = userRoleClaim != null && userRoleClaim.ToLower() == "admin";
+            bool isOwner = userIdClaim == id.ToString();
+
+            if (!isAdmin && !isOwner)
+            {
+                return Forbid();
             }
 
             var clientToUpdate = await dataRepository.GetByIdAsync(id);
@@ -86,6 +103,12 @@ namespace ClubMed.Controllers
             }
             else
             {
+                // Hasher le nouveau mot de passe s'il a été modifié
+                if (!string.IsNullOrEmpty(client.MotDePasseCrypter) && client.MotDePasseCrypter != clientToUpdate.MotDePasseCrypter)
+                {
+                    client.MotDePasseCrypter = BCrypt.Net.BCrypt.HashPassword(client.MotDePasseCrypter);
+                }
+
                 await dataRepository.UpdateAsync(clientToUpdate, client);
                 return NoContent();
             }
@@ -132,8 +155,25 @@ namespace ClubMed.Controllers
 
         // DELETE: api/Clients/5
         [HttpDelete("{id}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> DeleteClient(int id)
         {
+            // Vérification des droits : propriétaire ou admin
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userRoleClaim = User.FindFirstValue(ClaimTypes.Role);
+            
+            bool isAdmin = userRoleClaim != null && userRoleClaim.ToLower() == "admin";
+            bool isOwner = userIdClaim == id.ToString();
+
+            if (!isAdmin && !isOwner)
+            {
+                return Forbid();
+            }
+
             var client = await dataRepository.GetByIdAsync(id);
             if (client == null)
             {
