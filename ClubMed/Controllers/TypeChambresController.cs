@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,12 +22,27 @@ namespace ClubMed.Controllers
             dataRepository = dataRepo;
         }
 
+        private void UnpackPrix(TypeChambre tc)
+        {
+            if (tc.TextePresentation != null && tc.TextePresentation.Contains("|_PRIX_|"))
+            {
+                var tcParts = tc.TextePresentation.Split("|_PRIX_|", 2);
+                tc.TextePresentation = tcParts[0];
+                if (double.TryParse(tcParts[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var prix))
+                {
+                    tc.PrixNuit = prix;
+                }
+            }
+        }
+
         // GET: api/TypeChambres
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TypeChambre>>> GetTypesChambres()
         {
             var typeChambres = await dataRepository.GetAllAsync();
-            return typeChambres.ToList();
+            var list = typeChambres.ToList();
+            list.ForEach(UnpackPrix);
+            return list;
         }
 
         // GET: api/TypeChambres/5
@@ -40,6 +55,8 @@ namespace ClubMed.Controllers
             {
                 return NotFound();
             }
+
+            UnpackPrix(typeChambre);
 
             return typeChambre;
         }
