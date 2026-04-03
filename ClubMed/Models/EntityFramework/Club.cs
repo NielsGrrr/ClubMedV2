@@ -44,8 +44,19 @@ namespace ClubMed.Models.EntityFramework
         [JsonIgnore]
         public virtual Photo? Photo { get; set; }
 
-        [Microsoft.AspNetCore.Mvc.ModelBinding.Validation.ValidateNever]
-        public virtual SousLocalisation SousLocalisation { get; set; } = null!;
+        public virtual SousLocalisation? SousLocalisation { get; set; }
+
+        [NotMapped]
+        public decimal? PrixBase { get; set; } 
+
+        [NotMapped]
+        public int? TailleM2 { get; set; }
+
+        [NotMapped]
+        public int? CapacitePersonnes { get; set; }
+
+        [NotMapped]
+        public string? TypeSejour { get; set; }
 
         public virtual ICollection<Avis> Avis { get; set; } = new List<Avis>();
 
