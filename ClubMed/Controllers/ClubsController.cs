@@ -31,14 +31,17 @@ namespace ClubMed.Controllers
             {
                 var parts = club.Description.Split("|_META_|", 2);
                 club.Description = parts[0];
-                try
+                if (!string.IsNullOrWhiteSpace(parts[1]) && parts[1].Trim().StartsWith("{"))
                 {
-                    var meta = System.Text.Json.JsonSerializer.Deserialize<System.Text.Json.JsonElement>(parts[1]);
-                    if (meta.TryGetProperty("PrixBase", out var pb) && pb.ValueKind == System.Text.Json.JsonValueKind.Number) club.PrixBase = pb.GetDecimal();
-                    if (meta.TryGetProperty("TailleM2", out var tm) && tm.ValueKind == System.Text.Json.JsonValueKind.Number) club.TailleM2 = tm.GetInt32();
-                    if (meta.TryGetProperty("CapacitePersonnes", out var cp) && cp.ValueKind == System.Text.Json.JsonValueKind.Number) club.CapacitePersonnes = cp.GetInt32();
-                    if (meta.TryGetProperty("TypeSejour", out var ts) && ts.ValueKind == System.Text.Json.JsonValueKind.String) club.TypeSejour = ts.GetString();
-                } catch { } // Ignore errors
+                    try
+                    {
+                        var meta = System.Text.Json.JsonSerializer.Deserialize<System.Text.Json.JsonElement>(parts[1]);
+                        if (meta.TryGetProperty("PrixBase", out var pb) && pb.ValueKind == System.Text.Json.JsonValueKind.Number) club.PrixBase = pb.GetDecimal();
+                        if (meta.TryGetProperty("TailleM2", out var tm) && tm.ValueKind == System.Text.Json.JsonValueKind.Number) club.TailleM2 = tm.GetInt32();
+                        if (meta.TryGetProperty("CapacitePersonnes", out var cp) && cp.ValueKind == System.Text.Json.JsonValueKind.Number) club.CapacitePersonnes = cp.GetInt32();
+                        if (meta.TryGetProperty("TypeSejour", out var ts) && ts.ValueKind == System.Text.Json.JsonValueKind.String) club.TypeSejour = ts.GetString();
+                    } catch { } // Ignore errors
+                }
             }
         }
 
@@ -53,7 +56,7 @@ namespace ClubMed.Controllers
         }
 
         // GET: api/Clubs/5
-        [HttpGet("{id}")]
+        [HttpGet("id/{id}")]
         [ActionName("GetClubByID")]
         public async Task<ActionResult<Club>> GetClubById(int id)
         {
