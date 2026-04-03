@@ -39,6 +39,12 @@ namespace ClubMed
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            // Disable strict validation framework-wide to allow partial suite payload
+            builder.Services.Configure<Microsoft.AspNetCore.Mvc.ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+
             // D�finir la politique CORS
             builder.Services.AddCors(options =>
             {
