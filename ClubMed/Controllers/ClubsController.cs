@@ -1,5 +1,6 @@
 using System;
 using System.IO; // <-- AJOUTÉ ICI
+using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -193,6 +194,20 @@ namespace ClubMed.Controllers
             await context.SaveChangesAsync();
 
             return Ok(new { message = $"Photo enregistrée et liée au club avec succès !" });
+        }
+
+        // GET: api/Clubs/photos/100.webp
+        [HttpGet("photos/{fileName}")]
+        [AllowAnonymous]
+        public IActionResult GetPhoto(string fileName)
+        {
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "ressort", fileName);
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound();
+            }
+            var mimeType = fileName.EndsWith(".png") ? "image/png" : (fileName.EndsWith(".jpg") || fileName.EndsWith(".jpeg") ? "image/jpeg" : "image/webp");
+            return PhysicalFile(filePath, mimeType);
         }
 
         // DELETE: api/Clubs/5
