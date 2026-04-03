@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClubMed.Models.EntityFramework
@@ -33,11 +33,11 @@ namespace ClubMed.Models.EntityFramework
         [Column("tch_indisponible")]
         public bool? Indisponible { get; set; } = false;
 
-        public virtual Photo PhotoNav { get; set; } = null!;
+        public virtual Photo? PhotoNav { get; set; }
 
         public virtual ICollection<Chambre> Chambres { get; set; } = new List<Chambre>();
 
-        public virtual Club ClubNav { get; set; } = null!;
+        public virtual Club? ClubNav { get; set; }
 
         public virtual ICollection<TypeChambreEquipement> TypeChambreEquipements { get; set; } = new List<TypeChambreEquipement>();
 
