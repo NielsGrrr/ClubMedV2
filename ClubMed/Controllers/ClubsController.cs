@@ -34,8 +34,8 @@ namespace ClubMed.Controllers
         }
 
         // GET: api/Clubs/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Club>> GetClubByID(int id)
+        [HttpGet("id/{id}")]
+        public async Task<ActionResult<Club>> GetClubById(int id)
         {
             var club = await dataRepository.GetByIdAsync(id);
 
@@ -127,7 +127,7 @@ namespace ClubMed.Controllers
 
             await dataRepository.AddAsync(club);
 
-            return CreatedAtAction("GetClubByID", new { id = club.IdClub }, club);
+            return CreatedAtAction("GetClubById", new { id = club.IdClub }, club);
         }
 
         // POST: api/Clubs/5/photos (HU 55 - Upload d'images sécurisé sans migration)
