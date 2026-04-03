@@ -61,6 +61,9 @@ namespace ClubMed.Models.EntityFramework
         [NotMapped]
         public string? Localisation { get; set; }
 
+        [NotMapped]
+        public List<string> Indisponibilites { get; set; } = new List<string>();
+
         public virtual ICollection<Avis> Avis { get; set; } = new List<Avis>();
 
         public virtual ICollection<ClubStation> ClubStations { get; set; } = new List<ClubStation>();

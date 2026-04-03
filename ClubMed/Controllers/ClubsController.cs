@@ -42,6 +42,10 @@ namespace ClubMed.Controllers
                         if (meta.TryGetProperty("CapacitePersonnes", out var cp) && cp.ValueKind == System.Text.Json.JsonValueKind.Number) club.CapacitePersonnes = cp.GetInt32();
                         if (meta.TryGetProperty("TypeSejour", out var ts) && ts.ValueKind == System.Text.Json.JsonValueKind.String) club.TypeSejour = ts.GetString();
                         if (meta.TryGetProperty("Localisation", out var loc) && loc.ValueKind == System.Text.Json.JsonValueKind.String) club.Localisation = loc.GetString();
+                        if (meta.TryGetProperty("Indisponibilites", out var indisp) && indisp.ValueKind == System.Text.Json.JsonValueKind.Array) 
+                        {
+                            club.Indisponibilites = indisp.EnumerateArray().Select(a => a.GetString()).Where(s => s != null).ToList()!;
+                        }
                     } catch { } // Ignore errors
                 }
             }
@@ -120,12 +124,38 @@ namespace ClubMed.Controllers
             if (clubToUpdate == null) return NotFound();
 
             // Pack Metadata
-            var meta = new { PrixBase = club.PrixBase, TailleM2 = club.TailleM2, CapacitePersonnes = club.CapacitePersonnes, TypeSejour = club.TypeSejour, Localisation = club.Localisation };
+            var meta = new { PrixBase = club.PrixBase, TailleM2 = club.TailleM2, CapacitePersonnes = club.CapacitePersonnes, TypeSejour = club.TypeSejour, Localisation = club.Localisation, Indisponibilites = club.Indisponibilites };
             var rawDesc = club.Description != null && club.Description.Contains("|_META_|") ? club.Description.Substring(0, club.Description.IndexOf("|_META_|")) : club.Description;
             club.Description = rawDesc + "|_META_|" + System.Text.Json.JsonSerializer.Serialize(meta);
 
             // HU 55 Bypass: Ne pas écraser l'ID de la photo avec un état obsolète du frontend
             club.NumPhoto = clubToUpdate.NumPhoto;
+
+            // Manual EF Core Sync for TypeChambres
+            var context = ((ClubManager)dataRepository).GetContext();
+            
+            // Delete removed suites
+            foreach (var existingTc in clubToUpdate.TypeChambres.ToList()) {
+                if (!club.TypeChambres.Any(c => c.IdTypeChambre == existingTc.IdTypeChambre && c.IdTypeChambre != 0)) {
+                    context.Remove(existingTc);
+                }
+            }
+
+            // Update existing and Add new suites
+            foreach (var incomingTc in club.TypeChambres) {
+                var existingTc = clubToUpdate.TypeChambres.FirstOrDefault(c => c.IdTypeChambre == incomingTc.IdTypeChambre && c.IdTypeChambre != 0);
+                if (existingTc != null) {
+                    existingTc.NomType = incomingTc.NomType;
+                    existingTc.Surface = incomingTc.Surface;
+                    existingTc.CapaciteMax = incomingTc.CapaciteMax;
+                    existingTc.TextePresentation = incomingTc.TextePresentation;
+                } else {
+                    incomingTc.IdClub = clubToUpdate.IdClub;
+                    incomingTc.NumPhoto = clubToUpdate.NumPhoto;
+                    incomingTc.Indisponible = false;
+                    context.Add(incomingTc);
+                }
+            }
 
             await dataRepository.UpdateAsync(clubToUpdate, club);
 
@@ -145,9 +175,14 @@ namespace ClubMed.Controllers
             }
             
             // Pack Metadata pour une 1ère création
-            var meta = new { PrixBase = club.PrixBase, TailleM2 = club.TailleM2, CapacitePersonnes = club.CapacitePersonnes, TypeSejour = club.TypeSejour, Localisation = club.Localisation };
+            var meta = new { PrixBase = club.PrixBase, TailleM2 = club.TailleM2, CapacitePersonnes = club.CapacitePersonnes, TypeSejour = club.TypeSejour, Localisation = club.Localisation, Indisponibilites = club.Indisponibilites };
             var rawDesc = club.Description ?? "";
             club.Description = rawDesc + "|_META_|" + System.Text.Json.JsonSerializer.Serialize(meta);
+
+            foreach (var tc in club.TypeChambres) {
+                tc.NumPhoto = club.NumPhoto;
+                tc.Indisponible = false;
+            }
 
             await dataRepository.AddAsync(club);
 
