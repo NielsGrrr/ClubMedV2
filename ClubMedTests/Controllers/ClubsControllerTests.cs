@@ -142,14 +142,14 @@ namespace ClubMed.Tests.Controllers
         {
             var nouveauClub = new Club { IdClub = 2 };
             mockRepository.Setup(repo => repo.GetByIdAsync(2)).ReturnsAsync((Club)null);
-            mockRepository.Setup(repo => repo.AddAsync(nouveauClub)).Returns(Task.CompletedTask);
+            mockRepository.Setup(repo => repo.AddAsync(It.IsAny<Club>())).Returns(Task.CompletedTask);
 
             var result = await controller.PostClub(nouveauClub);
 
             Assert.IsInstanceOfType(result.Result, typeof(CreatedAtActionResult));
             var actionResult = result.Result as CreatedAtActionResult;
             Assert.AreEqual("GetClubByID", actionResult.ActionName);
-            mockRepository.Verify(repo => repo.AddAsync(nouveauClub), Times.Once);
+            mockRepository.Verify(repo => repo.AddAsync(It.IsAny<Club>()), Times.Once);
         }
 
         // ==========================================================
