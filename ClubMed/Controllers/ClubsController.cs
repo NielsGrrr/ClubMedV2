@@ -132,28 +132,31 @@ namespace ClubMed.Controllers
             club.NumPhoto = clubToUpdate.NumPhoto;
 
             // Manual EF Core Sync for TypeChambres
-            var context = ((ClubManager)dataRepository).GetContext();
+            var context = clubManager.GetContext();
             
-            // Delete removed suites
-            foreach (var existingTc in clubToUpdate.TypeChambres.ToList()) {
-                if (!club.TypeChambres.Any(c => c.IdTypeChambre == existingTc.IdTypeChambre && c.IdTypeChambre != 0)) {
-                    context.Remove(existingTc);
+            if (context != null) 
+            {
+                // Delete removed suites
+                foreach (var existingTc in clubToUpdate.TypeChambres.ToList()) {
+                    if (!club.TypeChambres.Any(c => c.IdTypeChambre == existingTc.IdTypeChambre && c.IdTypeChambre != 0)) {
+                        context.Remove(existingTc);
+                    }
                 }
-            }
 
-            // Update existing and Add new suites
-            foreach (var incomingTc in club.TypeChambres) {
-                var existingTc = clubToUpdate.TypeChambres.FirstOrDefault(c => c.IdTypeChambre == incomingTc.IdTypeChambre && c.IdTypeChambre != 0);
-                if (existingTc != null) {
-                    existingTc.NomType = incomingTc.NomType;
-                    existingTc.Surface = incomingTc.Surface;
-                    existingTc.CapaciteMax = incomingTc.CapaciteMax;
-                    existingTc.TextePresentation = incomingTc.TextePresentation;
-                } else {
-                    incomingTc.IdClub = clubToUpdate.IdClub;
-                    incomingTc.NumPhoto = clubToUpdate.NumPhoto;
-                    incomingTc.Indisponible = false;
-                    context.Add(incomingTc);
+                // Update existing and Add new suites
+                foreach (var incomingTc in club.TypeChambres) {
+                    var existingTc = clubToUpdate.TypeChambres.FirstOrDefault(c => c.IdTypeChambre == incomingTc.IdTypeChambre && c.IdTypeChambre != 0);
+                    if (existingTc != null) {
+                        existingTc.NomType = incomingTc.NomType;
+                        existingTc.Surface = incomingTc.Surface;
+                        existingTc.CapaciteMax = incomingTc.CapaciteMax;
+                        existingTc.TextePresentation = incomingTc.TextePresentation;
+                    } else {
+                        incomingTc.IdClub = clubToUpdate.IdClub;
+                        incomingTc.NumPhoto = clubToUpdate.NumPhoto;
+                        incomingTc.Indisponible = false;
+                        context.Add(incomingTc);
+                    }
                 }
             }
 
