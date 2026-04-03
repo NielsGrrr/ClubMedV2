@@ -58,6 +58,9 @@ namespace ClubMed.Models.EntityFramework
         [NotMapped]
         public string? TypeSejour { get; set; }
 
+        [NotMapped]
+        public string? Localisation { get; set; }
+
         public virtual ICollection<Avis> Avis { get; set; } = new List<Avis>();
 
         public virtual ICollection<ClubStation> ClubStations { get; set; } = new List<ClubStation>();

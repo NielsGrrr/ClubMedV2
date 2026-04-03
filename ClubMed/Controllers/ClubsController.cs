@@ -40,6 +40,7 @@ namespace ClubMed.Controllers
                         if (meta.TryGetProperty("TailleM2", out var tm) && tm.ValueKind == System.Text.Json.JsonValueKind.Number) club.TailleM2 = tm.GetInt32();
                         if (meta.TryGetProperty("CapacitePersonnes", out var cp) && cp.ValueKind == System.Text.Json.JsonValueKind.Number) club.CapacitePersonnes = cp.GetInt32();
                         if (meta.TryGetProperty("TypeSejour", out var ts) && ts.ValueKind == System.Text.Json.JsonValueKind.String) club.TypeSejour = ts.GetString();
+                        if (meta.TryGetProperty("Localisation", out var loc) && loc.ValueKind == System.Text.Json.JsonValueKind.String) club.Localisation = loc.GetString();
                     } catch { } // Ignore errors
                 }
             }
@@ -118,7 +119,7 @@ namespace ClubMed.Controllers
             if (clubToUpdate == null) return NotFound();
 
             // Pack Metadata
-            var meta = new { PrixBase = club.PrixBase, TailleM2 = club.TailleM2, CapacitePersonnes = club.CapacitePersonnes, TypeSejour = club.TypeSejour };
+            var meta = new { PrixBase = club.PrixBase, TailleM2 = club.TailleM2, CapacitePersonnes = club.CapacitePersonnes, TypeSejour = club.TypeSejour, Localisation = club.Localisation };
             var rawDesc = club.Description != null && club.Description.Contains("|_META_|") ? club.Description.Substring(0, club.Description.IndexOf("|_META_|")) : club.Description;
             club.Description = rawDesc + "|_META_|" + System.Text.Json.JsonSerializer.Serialize(meta);
 
@@ -143,7 +144,7 @@ namespace ClubMed.Controllers
             }
             
             // Pack Metadata pour une 1ère création
-            var meta = new { PrixBase = club.PrixBase, TailleM2 = club.TailleM2, CapacitePersonnes = club.CapacitePersonnes, TypeSejour = club.TypeSejour };
+            var meta = new { PrixBase = club.PrixBase, TailleM2 = club.TailleM2, CapacitePersonnes = club.CapacitePersonnes, TypeSejour = club.TypeSejour, Localisation = club.Localisation };
             var rawDesc = club.Description ?? "";
             club.Description = rawDesc + "|_META_|" + System.Text.Json.JsonSerializer.Serialize(meta);
 
