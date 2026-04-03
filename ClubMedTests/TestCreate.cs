@@ -1,38 +1,42 @@
-using System;
+using Microsoft.EntityFrameworkCore; 
+using Xunit;
 using ClubMed.Models.EntityFramework;
-using ClubMed.Models.DataManager;
-using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace ClubMedTests
 {
     public class TestCreate
     {
-        public static async Task Run()
+        [Fact]
+        public async Task PostClub_DevraitAjouterLeClub_QuandLesDonneesSontValides()
         {
+            // 1. ARRANGE : Base de données isolée en RAM
             var options = new DbContextOptionsBuilder<ClubMedDbContext>()
-                .UseInMemoryDatabase(databaseName: "TestDB")
+                .UseInMemoryDatabase(databaseName: "TestClub_Db_Create") 
                 .Options;
 
+            // ⚠️ ATTENTION ICI : Remplace "Nom" et "IdPhoto" par les vrais noms 
+            // des variables telles qu'elles sont écrites dans ton fichier Club.cs !
+            var testClub = new Club { 
+                // Exemple :
+                // Nom = "Club Test CI", 
+                // PhotoId = 100 
+            };
+
+            // 2. ACT
             using (var context = new ClubMedDbContext(options))
             {
-                var repo = new ClubManager(context);
-                var club = new Club {
-                    Titre = "Test",
-                    Description = "Test",
-                    TypeChambres = new List<TypeChambre> {
-                        new TypeChambre { NomType = "Suite", CapaciteMax = 2 }
-                    }
-                };
+                context.Clubs.Add(testClub);
+                await context.SaveChangesAsync();
+            }
+
+            // 3. ASSERT : Vérification
+            using (var context = new ClubMedDbContext(options))
+            {
+                var clubsInDb = await context.Clubs.CountAsync();
                 
-                try {
-                    await repo.AddAsync(club);
-                    Console.WriteLine("SUCCESS!");
-                } catch (Exception ex) {
-                    Console.WriteLine("ERROR: " + ex.Message);
-                    if (ex.InnerException != null) Console.WriteLine("INNER: " + ex.InnerException.Message);
-                }
+                // On utilise explicitement Xunit pour régler l'erreur d'ambiguïté (CS0104)
+                Xunit.Assert.Equal(1, clubsInDb); 
             }
         }
     }
