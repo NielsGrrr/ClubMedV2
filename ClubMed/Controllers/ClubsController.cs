@@ -41,7 +41,7 @@ namespace ClubMed.Controllers
 
             if (club == null)
             {
-                return NotFound("Cet identifiant est inconnu. (" + id + ")");
+                return NotFound();
             }
 
             // Unpack Metadata
@@ -96,12 +96,12 @@ namespace ClubMed.Controllers
 
             if (id != club.IdClub)
             {
-                return BadRequest("Les identifiants ne correspondent pas.");
+                return BadRequest();
             }
 
             var clubToUpdate = await dataRepository.GetByIdAsync(id);
 
-            if (clubToUpdate == null) return NotFound("Le club n'existe pas.");
+            if (clubToUpdate == null) return NotFound();
 
             // Pack Metadata
             var meta = new { PrixBase = club.PrixBase, TailleM2 = club.TailleM2, CapacitePersonnes = club.CapacitePersonnes, TypeSejour = club.TypeSejour };
@@ -119,6 +119,11 @@ namespace ClubMed.Controllers
         public async Task<ActionResult<Club>> PostClub(Club club)
         {
             ModelState.Clear(); // Bypass strict API validation
+            var existingClub = await dataRepository.GetByIdAsync(club.IdClub);
+            if (existingClub != null)
+            {
+                return Conflict(club);
+            }
             
             // Pack Metadata pour une 1ère création
             var meta = new { PrixBase = club.PrixBase, TailleM2 = club.TailleM2, CapacitePersonnes = club.CapacitePersonnes, TypeSejour = club.TypeSejour };
@@ -127,7 +132,7 @@ namespace ClubMed.Controllers
 
             await dataRepository.AddAsync(club);
 
-            return CreatedAtAction("GetClubById", new { id = club.IdClub }, club);
+            return CreatedAtAction("GetClubByID", new { id = club.IdClub }, club);
         }
 
         // POST: api/Clubs/5/photos (HU 55 - Upload d'images sécurisé sans migration)
