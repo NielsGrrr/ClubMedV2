@@ -25,27 +25,9 @@ namespace ClubMed.Controllers
             this.clubManager = clubMan;
         }
 
-        // GET: api/Clubs
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Club>>> GetClubs()
+        private void UnpackMetadata(Club club)
         {
-            var localisations = await dataRepository.GetAllAsync();
-            return localisations.ToList();
-        }
-
-        // GET: api/Clubs/5
-        [HttpGet("id/{id}")]
-        public async Task<ActionResult<Club>> GetClubById(int id)
-        {
-            var club = await dataRepository.GetByIdAsync(id);
-
-            if (club == null)
-            {
-                return NotFound();
-            }
-
-            // Unpack Metadata
-            if (club.Description != null && club.Description.Contains("|_META_|"))
+            if (club?.Description != null && club.Description.Contains("|_META_|"))
             {
                 var parts = club.Description.Split("|_META_|", 2);
                 club.Description = parts[0];
@@ -58,6 +40,31 @@ namespace ClubMed.Controllers
                     if (meta.TryGetProperty("TypeSejour", out var ts) && ts.ValueKind == System.Text.Json.JsonValueKind.String) club.TypeSejour = ts.GetString();
                 } catch { } // Ignore errors
             }
+        }
+
+        // GET: api/Clubs
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Club>>> GetClubs()
+        {
+            var clubs = await dataRepository.GetAllAsync();
+            var list = clubs.ToList();
+            list.ForEach(UnpackMetadata);
+            return list;
+        }
+
+        // GET: api/Clubs/5
+        [HttpGet("{id}")]
+        [ActionName("GetClubByID")]
+        public async Task<ActionResult<Club>> GetClubById(int id)
+        {
+            var club = await dataRepository.GetByIdAsync(id);
+
+            if (club == null)
+            {
+                return NotFound();
+            }
+
+            UnpackMetadata(club);
 
             return club;
         }
@@ -70,7 +77,9 @@ namespace ClubMed.Controllers
             if (clubs == null || !clubs.Any())
                 return NotFound($"Route OK mais aucun club pour le pays {idlocalisation}");
 
-            return Ok(clubs);
+            var list = clubs.ToList();
+            list.ForEach(UnpackMetadata);
+            return Ok(list);
         }
 
         // GET: api/Clubs/5
@@ -84,7 +93,9 @@ namespace ClubMed.Controllers
                 return NotFound();
             }
 
-            return Ok(clubs);
+            var list = clubs.ToList();
+            list.ForEach(UnpackMetadata);
+            return Ok(list);
         }
 
         // PUT: api/Clubs/5
@@ -107,6 +118,9 @@ namespace ClubMed.Controllers
             var meta = new { PrixBase = club.PrixBase, TailleM2 = club.TailleM2, CapacitePersonnes = club.CapacitePersonnes, TypeSejour = club.TypeSejour };
             var rawDesc = club.Description != null && club.Description.Contains("|_META_|") ? club.Description.Substring(0, club.Description.IndexOf("|_META_|")) : club.Description;
             club.Description = rawDesc + "|_META_|" + System.Text.Json.JsonSerializer.Serialize(meta);
+
+            // HU 55 Bypass: Ne pas écraser l'ID de la photo avec un état obsolète du frontend
+            club.NumPhoto = clubToUpdate.NumPhoto;
 
             await dataRepository.UpdateAsync(clubToUpdate, club);
 
