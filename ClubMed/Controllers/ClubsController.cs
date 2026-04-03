@@ -347,9 +347,24 @@ namespace ClubMed.Controllers
                 return NotFound();
             }
 
-            await dataRepository.DeleteAsync(club);
+            try
+            {
+                // Cascade manuel : supprimer les TypeChambres enfants avant le Club
+                var context = clubManager.GetContext();
+                if (context != null && club.TypeChambres != null && club.TypeChambres.Any())
+                {
+                    context.RemoveRange(club.TypeChambres);
+                    await context.SaveChangesAsync();
+                }
 
-            return NoContent();
+                await dataRepository.DeleteAsync(club);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                var detail = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                return Conflict(new { message = "Impossible de supprimer ce club : il est lié à d'autres données.", details = detail });
+            }
         }
         /*
         private bool ClubExists(int id)
