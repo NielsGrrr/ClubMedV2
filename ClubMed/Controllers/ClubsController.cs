@@ -192,6 +192,9 @@ namespace ClubMed.Controllers
             var rawDesc = club.Description ?? "";
             club.Description = rawDesc + "|_META_|" + System.Text.Json.JsonSerializer.Serialize(meta);
 
+            // Bypass FK Constraint: The club must be created with a valid photo ID before the user can upload their custom one
+            if (club.NumPhoto == 0) club.NumPhoto = 100;
+
             foreach (var tc in club.TypeChambres) {
                 tc.NumPhoto = club.NumPhoto;
                 tc.Indisponible = false;
