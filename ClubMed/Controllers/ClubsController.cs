@@ -59,6 +59,23 @@ namespace ClubMed.Controllers
                     } catch { } // Ignore errors
                 }
             }
+
+            // Unpack prix from TypeChambres TextePresentation
+            if (club.TypeChambres != null)
+            {
+                foreach (var tc in club.TypeChambres)
+                {
+                    if (tc.TextePresentation != null && tc.TextePresentation.Contains("|_PRIX_|"))
+                    {
+                        var tcParts = tc.TextePresentation.Split("|_PRIX_|", 2);
+                        tc.TextePresentation = tcParts[0];
+                        if (double.TryParse(tcParts[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var prix))
+                        {
+                            tc.PrixNuit = prix;
+                        }
+                    }
+                }
+            }
         }
 
         // GET: api/Clubs
@@ -155,6 +172,14 @@ namespace ClubMed.Controllers
 
                 // Update existing and Add new suites
                 foreach (var incomingTc in club.TypeChambres) {
+                    // Pack prixNuit into TextePresentation before saving
+                    if (incomingTc.PrixNuit != null && incomingTc.PrixNuit > 0) {
+                        var rawPres = incomingTc.TextePresentation ?? "";
+                        // Strip any existing |_PRIX_| before re-packing
+                        if (rawPres.Contains("|_PRIX_|")) rawPres = rawPres.Split("|_PRIX_|")[0];
+                        incomingTc.TextePresentation = rawPres + "|_PRIX_|" + incomingTc.PrixNuit.Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    }
+
                     var existingTc = clubToUpdate.TypeChambres.FirstOrDefault(c => c.IdTypeChambre == incomingTc.IdTypeChambre && c.IdTypeChambre != 0);
                     if (existingTc != null) {
                         existingTc.NomType = incomingTc.NomType;
@@ -177,34 +202,67 @@ namespace ClubMed.Controllers
 
         // POST: api/Clubs
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // POST: api/Clubs
         [HttpPost]
         public async Task<ActionResult<Club>> PostClub(Club club)
         {
             ModelState.Clear(); // Bypass strict API validation
-            var existingClub = await dataRepository.GetByIdAsync(club.IdClub);
-            if (existingClub != null)
-            {
-                return Conflict(club);
-            }
-            
-            // Pack Metadata pour une 1ère création
-            var meta = new { PrixBase = club.PrixBase, TailleM2 = club.TailleM2, CapacitePersonnes = club.CapacitePersonnes, TypeSejour = club.TypeSejour, Localisation = club.Localisation, Indisponibilites = club.Indisponibilites };
+
+            // 1. PACK METADATA
+            var meta = new { 
+                PrixBase = club.PrixBase, 
+                TailleM2 = club.TailleM2, 
+                CapacitePersonnes = club.CapacitePersonnes, 
+                TypeSejour = club.TypeSejour, 
+                Localisation = club.Localisation, 
+                Indisponibilites = club.Indisponibilites ?? new List<string>() // Sécurité anti-null
+            };
             var rawDesc = club.Description ?? "";
             club.Description = rawDesc + "|_META_|" + System.Text.Json.JsonSerializer.Serialize(meta);
 
-            // Bypass FK Constraint: The club must be created with a valid photo ID before the user can upload their custom one
+            // 2. BYPASS FK CONSTRAINT (L'astuce de la photo par défaut)
             if (club.NumPhoto == 0) club.NumPhoto = 100;
 
-            foreach (var tc in club.TypeChambres) {
-                tc.NumPhoto = club.NumPhoto;
-                tc.Indisponible = false;
+            // 3. SÉCURITÉ ANTI NULL-REFERENCE (Le vrai suspect du crash !)
+            if (club.TypeChambres != null)
+            {
+                foreach (var tc in club.TypeChambres) {
+                    tc.NumPhoto = club.NumPhoto;
+                    tc.Indisponible = false;
+                    // Pack prixNuit into TextePresentation
+                    if (tc.PrixNuit != null && tc.PrixNuit > 0) {
+                        var rawPres = tc.TextePresentation ?? "";
+                        tc.TextePresentation = rawPres + "|_PRIX_|" + tc.PrixNuit.Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    }
+                }
+            }
+            else
+            {
+                // Si le front n'a pas envoyé de chambres, on initialise une liste vide pour rassurer EF Core
+                club.TypeChambres = new List<TypeChambre>();
             }
 
-            await dataRepository.AddAsync(club);
-
-            return CreatedAtAction("GetClubByID", new { id = club.IdClub }, club);
+            // 4. INTERCEPTION DES ERREURS SQL (Mode Débogage Sénior)
+            try 
+            {
+                // On force l'ID à 0 pour s'assurer que PostgreSQL gère l'auto-incrémentation (SERIAL)
+                club.IdClub = 0; 
+                
+                await dataRepository.AddAsync(club);
+                return CreatedAtAction("GetClubByID", new { id = club.IdClub }, club);
+            }
+            catch (Exception ex)
+            {
+                // Si PostgreSQL refuse l'insertion, on renvoie l'erreur EXACTE au frontend !
+                var sqlError = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                
+                // On retourne une erreur 400 (Bad Request) avec le détail, lisible dans ta console Vue.js
+                return BadRequest(new { 
+                    message = "Erreur lors de l'insertion en base de données.", 
+                    details = sqlError 
+                });
+            }
         }
-
         // POST: api/Clubs/5/photos (HU 55 - Upload d'images sécurisé sans migration)
         [HttpPost("{id}/photos")]
         public async Task<IActionResult> UploadPhotos(int id, [FromForm] List<IFormFile> photos)

@@ -33,6 +33,9 @@ namespace ClubMed.Models.EntityFramework
         [Column("tch_indisponible")]
         public bool? Indisponible { get; set; } = false;
 
+        [NotMapped]
+        public double? PrixNuit { get; set; }
+
         public virtual Photo? PhotoNav { get; set; }
 
         public virtual ICollection<Chambre> Chambres { get; set; } = new List<Chambre>();
