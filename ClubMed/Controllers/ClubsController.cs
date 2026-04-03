@@ -26,6 +26,16 @@ namespace ClubMed.Controllers
             this.clubManager = clubMan;
         }
 
+        private string GetPhotoStoragePath()
+        {
+            if (Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME") != null)
+            {
+                var homePath = Environment.GetEnvironmentVariable("HOME") ?? "D:\\home";
+                return Path.Combine(homePath, "data", "images", "ressort");
+            }
+            return Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "ressort");
+        }
+
         private void UnpackMetadata(Club club)
         {
             if (club?.Description != null && club.Description.Contains("|_META_|"))
@@ -201,7 +211,7 @@ namespace ClubMed.Controllers
 
             if (photos == null || photos.Count == 0) return BadRequest("Aucune photo reçue.");
 
-            var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "ressort");
+            var uploadPath = GetPhotoStoragePath();
             if (!Directory.Exists(uploadPath)) Directory.CreateDirectory(uploadPath);
 
             // On ne prend que la 1ère photo pour la lier comme "Main Photo" du Club (NumPhoto)
@@ -239,7 +249,9 @@ namespace ClubMed.Controllers
         [AllowAnonymous]
         public IActionResult GetPhoto(string fileName)
         {
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "ressort", fileName);
+            var uploadPath = GetPhotoStoragePath();
+            var filePath = Path.Combine(uploadPath, fileName);
+            
             if (!System.IO.File.Exists(filePath))
             {
                 return NotFound();
