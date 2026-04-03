@@ -208,6 +208,12 @@ namespace ClubMed.Controllers
         {
             ModelState.Clear(); // Bypass strict API validation
 
+            var existingClub = await dataRepository.GetByIdAsync(club.IdClub);
+            if (existingClub != null)
+            {
+                return Conflict(club);
+            }
+
             // 1. PACK METADATA
             var meta = new { 
                 PrixBase = club.PrixBase, 
