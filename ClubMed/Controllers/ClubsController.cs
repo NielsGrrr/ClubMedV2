@@ -150,54 +150,64 @@ namespace ClubMed.Controllers
 
             if (clubToUpdate == null) return NotFound();
 
-            // Pack Metadata
-            var meta = new { PrixBase = club.PrixBase, TailleM2 = club.TailleM2, CapacitePersonnes = club.CapacitePersonnes, TypeSejour = club.TypeSejour, Localisation = club.Localisation, Indisponibilites = club.Indisponibilites };
-            var rawDesc = club.Description != null && club.Description.Contains("|_META_|") ? club.Description.Substring(0, club.Description.IndexOf("|_META_|")) : club.Description;
-            club.Description = rawDesc + "|_META_|" + System.Text.Json.JsonSerializer.Serialize(meta);
-
-            // HU 55 Bypass: Ne pas écraser l'ID de la photo avec un état obsolète du frontend
-            club.NumPhoto = clubToUpdate.NumPhoto;
-
-            // Manual EF Core Sync for TypeChambres
-            var context = clubManager.GetContext();
-            
-            if (context != null) 
+            try
             {
-                // Delete removed suites
-                foreach (var existingTc in clubToUpdate.TypeChambres.ToList()) {
-                    if (!club.TypeChambres.Any(c => c.IdTypeChambre == existingTc.IdTypeChambre && c.IdTypeChambre != 0)) {
-                        context.Remove(existingTc);
+                // Pack Metadata
+                var meta = new { PrixBase = club.PrixBase, TailleM2 = club.TailleM2, CapacitePersonnes = club.CapacitePersonnes, TypeSejour = club.TypeSejour, Localisation = club.Localisation, Indisponibilites = club.Indisponibilites ?? new List<string>() };
+                var rawDesc = club.Description != null && club.Description.Contains("|_META_|") ? club.Description.Substring(0, club.Description.IndexOf("|_META_|")) : (club.Description ?? "");
+                club.Description = rawDesc + "|_META_|" + System.Text.Json.JsonSerializer.Serialize(meta);
+
+                // HU 55 Bypass: Ne pas écraser l'ID de la photo avec un état obsolète du frontend
+                club.NumPhoto = clubToUpdate.NumPhoto;
+
+                // Manual EF Core Sync for TypeChambres
+                var context = clubManager.GetContext();
+                
+                if (context != null && club.TypeChambres != null) 
+                {
+                    var existingChambres = clubToUpdate.TypeChambres?.ToList() ?? new List<TypeChambre>();
+
+                    // Delete removed suites
+                    foreach (var existingTc in existingChambres) {
+                        if (!club.TypeChambres.Any(c => c.IdTypeChambre == existingTc.IdTypeChambre && c.IdTypeChambre != 0)) {
+                            context.Remove(existingTc);
+                        }
+                    }
+
+                    // Update existing and Add new suites
+                    foreach (var incomingTc in club.TypeChambres) {
+                        // Pack prixNuit into TextePresentation before saving
+                        if (incomingTc.PrixNuit != null && incomingTc.PrixNuit > 0) {
+                            var rawPres = incomingTc.TextePresentation ?? "";
+                            // Strip any existing |_PRIX_| before re-packing
+                            if (rawPres.Contains("|_PRIX_|")) rawPres = rawPres.Split("|_PRIX_|")[0];
+                            incomingTc.TextePresentation = rawPres + "|_PRIX_|" + incomingTc.PrixNuit.Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                        }
+
+                        var existingTc = existingChambres.FirstOrDefault(c => c.IdTypeChambre == incomingTc.IdTypeChambre && c.IdTypeChambre != 0);
+                        if (existingTc != null) {
+                            existingTc.NomType = incomingTc.NomType;
+                            existingTc.Surface = incomingTc.Surface;
+                            existingTc.CapaciteMax = incomingTc.CapaciteMax;
+                            existingTc.TextePresentation = incomingTc.TextePresentation;
+                        } else {
+                            incomingTc.IdClub = clubToUpdate.IdClub;
+                            incomingTc.NumPhoto = clubToUpdate.NumPhoto;
+                            incomingTc.Indisponible = false;
+                            context.Add(incomingTc);
+                        }
                     }
                 }
 
-                // Update existing and Add new suites
-                foreach (var incomingTc in club.TypeChambres) {
-                    // Pack prixNuit into TextePresentation before saving
-                    if (incomingTc.PrixNuit != null && incomingTc.PrixNuit > 0) {
-                        var rawPres = incomingTc.TextePresentation ?? "";
-                        // Strip any existing |_PRIX_| before re-packing
-                        if (rawPres.Contains("|_PRIX_|")) rawPres = rawPres.Split("|_PRIX_|")[0];
-                        incomingTc.TextePresentation = rawPres + "|_PRIX_|" + incomingTc.PrixNuit.Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    }
+                await dataRepository.UpdateAsync(clubToUpdate, club);
 
-                    var existingTc = clubToUpdate.TypeChambres.FirstOrDefault(c => c.IdTypeChambre == incomingTc.IdTypeChambre && c.IdTypeChambre != 0);
-                    if (existingTc != null) {
-                        existingTc.NomType = incomingTc.NomType;
-                        existingTc.Surface = incomingTc.Surface;
-                        existingTc.CapaciteMax = incomingTc.CapaciteMax;
-                        existingTc.TextePresentation = incomingTc.TextePresentation;
-                    } else {
-                        incomingTc.IdClub = clubToUpdate.IdClub;
-                        incomingTc.NumPhoto = clubToUpdate.NumPhoto;
-                        incomingTc.Indisponible = false;
-                        context.Add(incomingTc);
-                    }
-                }
+                return NoContent();
             }
-
-            await dataRepository.UpdateAsync(clubToUpdate, club);
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                var detail = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                return BadRequest(new { message = "Erreur lors de la mise à jour.", details = detail });
+            }
         }
 
         // POST: api/Clubs
